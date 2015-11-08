@@ -1,0 +1,13 @@
+${package}
+
+import java.util.List;
+${import_entity}
+
+public interface ${Entity}Mapper {
+	
+	${Entity} get${Entity}(Long id);
+	int save(${Entity} ${entity});
+	int update(${Entity} ${entity});
+	int delete(Long id);
+	List<${Entity}> list(${Entity} ${entity});
+}

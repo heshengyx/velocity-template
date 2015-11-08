@@ -1,0 +1,40 @@
+${package}
+
+import java.util.List;
+import org.springframework.stereotype.Repository;
+
+import com.sfpay.map.dao.BaseDao;
+import com.sfpay.map.dao.${Entity}Dao;
+${import_entity}
+import com.sfpay.map.mapper.${Entity}Mapper;
+
+@Repository
+public class ${Entity}DaoImpl extends BaseDao<${Entity}Mapper> implements ${Entity}Dao {
+	
+	public ${Entity} get${Entity}(Long id) {
+		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
+		return mapper.get${Entity}(id);
+	}
+
+	public ${Entity} save(${Entity} ${entity}) throws Exception {
+		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
+		mapper.save(${entity});
+		return ${entity};
+	}
+	
+	public ${Entity} update(${Entity} ${entity}) throws Exception {
+		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
+		mapper.update(${entity});
+		return ${entity};
+	}
+	
+	public void delete(Long id) throws Exception {
+		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
+		mapper.delete(id);
+	}
+
+	public List<${Entity}> list(${Entity} ${entity}) {
+		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
+		return mapper.list(${entity});
+	}
+}

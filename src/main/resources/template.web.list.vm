@@ -1,0 +1,108 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<jsp:include page="/common/include.jsp" />
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>${title}管理</title>
+	<link rel="stylesheet" type="text/css" href="${contextPath}/css/themes/metro/easyui.css">
+	<link rel="stylesheet" type="text/css" href="${contextPath}/css/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="${contextPath}/css/style.css">
+	<script type="text/javascript" src="${contextPath}/js/jquery.min.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery.easyui.min.js"></script>
+	<script type="text/javascript">
+	var url;
+	function add${Entity}(){    
+	    $('#dlg').dialog('open').dialog('setTitle', '${title}新增');    
+	    $('#fm').form('clear'); 
+	    url = '${entity}/save';     
+	}
+	function edit${Entity}() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row){
+			$('#dlg').dialog('open').dialog('setTitle', '${title}编辑');
+			$('#fm').form('load', row);
+			url = '${entity}/update?id=' + row.id;
+		}
+	}
+	function saveOrUpdate() {
+		$('#fm').form('submit', {
+			url: url,
+			onSubmit: function() {
+				return $(this).form('validate');
+			},
+			success: function(result) {
+				var result = eval('('+result+')');
+				if (result.flag) {
+					$('#dlg').dialog('close');
+					$('#dg').datagrid('reload');
+				} else {
+					$.messager.show({
+						title: '保存${title}',
+						msg: "保存出错"
+					});
+				}
+			}
+		});
+	}
+	function remove${Entity}() {
+		var row = $('#dg').datagrid('getSelected');
+		if (row) {
+			$.messager.confirm('删除确认','确定要删除此${title}吗?',function(r){
+				if (r) {
+					$.post('${entity}/delete', {id:row.id}, function(result) {
+						if (result.flag) {
+							$('#dg').datagrid('reload');
+						} else {
+							$.messager.show({
+								title: '删除${title}',
+								msg: '删除出错'
+							});
+						}
+					},'json');
+				}
+			});
+		}
+	}
+	function doSearch() {
+		$('#dg').datagrid('load', {    
+			${conditions}    
+		}); 
+	}
+	</script>
+</head>
+
+<body class="easyui-layout" style="text-align:center;padding:3px;">
+<table id="dg" class="easyui-datagrid" data-options="rownumbers:true,singleSelect:true" style="height:auto;" url="${entity}s/json" toolbar="#tb">    
+<thead>    
+    <tr>
+${ths}  
+    </tr>    
+</thead>    
+</table>
+
+<div id="tb" style="padding:3px">
+	<div style="margin-bottom:5px">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add${Entity}()"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit${Entity}()"></a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="remove${Entity}()"></a>
+	</div>
+${searchs}   
+</div>
+
+<div id="dlg" class="easyui-dialog" style="width:500px;height:auto;padding:10px"  
+        closed="true" buttons="#dlg-buttons" data-options="modal:true"> 
+    <form id="fm" method="post">
+    <table width="100%">
+    <tbody>
+	${elements}
+    </tbody>
+    </table>
+    </form>  
+</div>  
+<div id="dlg-buttons">  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveOrUpdate()">保存</a>  
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">关闭</a>  
+</div>
+</body>
+</html>

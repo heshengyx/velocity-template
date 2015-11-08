@@ -1,0 +1,13 @@
+${package}
+
+import java.util.List;
+${import_entity}
+
+public interface ${Entity}Dao {
+	
+	public ${Entity} save(${Entity} ${entity}) throws Exception;
+	public ${Entity} update(${Entity} ${entity}) throws Exception;
+	public ${Entity} get${Entity}(Long id);
+	public void delete(Long id) throws Exception;
+	public List<${Entity}> list(${Entity} ${entity});
+}

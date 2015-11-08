@@ -1,0 +1,38 @@
+${package}
+
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.sfpay.map.dao.${Entity}Dao;
+${import_entity}
+import com.sfpay.map.service.${Entity}Service;
+
+@Component
+public class ${Entity}ServiceImpl implements ${Entity}Service {
+
+	@Autowired
+	private ${Entity}Dao ${entity}Dao;
+	
+	public ${Entity} get${Entity}(Long id) {
+		return ${entity}Dao.get${Entity}(id);
+	}
+
+	public ${Entity} save(${Entity} ${entity}) throws Exception {
+		${entity}.setCreateTime(new Date());
+		return ${entity}Dao.save(${entity});
+	}
+	
+	public ${Entity} update(${Entity} ${entity}) throws Exception {
+		return ${entity}Dao.update(${entity});
+	}
+	
+	public void delete(Long id) throws Exception {
+		${entity}Dao.delete(id);
+	}
+	
+	public List<${Entity}> list(${Entity} ${entity}) {
+		return ${entity}Dao.list(${entity});
+	}
+}

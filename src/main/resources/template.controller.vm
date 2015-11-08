@@ -1,0 +1,76 @@
+${package}
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+${import_entity}
+import com.sfpay.map.service.${Entity}Service;
+
+@Controller
+@RequestMapping("/manage")
+public class ${Entity}Controller {
+
+	@Autowired
+	private ${Entity}Service ${entity}Service;
+
+	@RequestMapping(value="/${entity}/save", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> save(${Entity} ${entity}) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			${entity}Service.save(${entity});
+			map.put("flag", true);
+		} catch (Exception e) {
+			map.put("flag", false);
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/${entity}/update", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> update(@RequestParam String id, ${Entity} ${entity}) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			${entity}.setId(Long.valueOf(id));
+			${entity}Service.update(${entity});
+			map.put("flag", true);
+		} catch (Exception e) {
+			map.put("flag", false);
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/${entity}/delete", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> delete(@RequestParam String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			${entity}Service.delete(Long.valueOf(id));
+			map.put("flag", true);
+		} catch (Exception e) {
+			map.put("flag", false);
+		}
+		return map;
+	}
+	
+	@RequestMapping("/${entity}s")
+	public String list(Model model) {
+		return "manage/${entity}/${entity}-list";
+	}
+	
+	@RequestMapping("/${entity}s/json")
+	@ResponseBody
+	public List<${Entity}> list(${Entity} ${entity}) {
+		List<${Entity}> ${entity}s = ${entity}Service.list(${entity});
+		return ${entity}s;
+	}
+}
