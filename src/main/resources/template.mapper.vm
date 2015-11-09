@@ -1,13 +1,18 @@
 ${package}
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 ${import_entity}
+import com.house.building.param.${Entity}QueryParam;
 
-public interface ${Entity}Mapper {
+public interface I${Entity}Mapper {
 	
-	${Entity} get${Entity}(Long id);
-	int save(${Entity} ${entity});
-	int update(${Entity} ${entity});
-	int delete(Long id);
-	List<${Entity}> list(${Entity} ${entity});
+	int save(@Param("param") ${Entity} param);
+	int update(@Param("param") ${Entity} param);
+	int deleteById(@Param("id") String id);
+	${Entity} getDataById(@Param("id") String id);
+	
+	int count(@Param("param") ${Entity}QueryParam param);
+	List<${Entity}> query(@Param("param") ${Entity}QueryParam param,
+			@Param("start") int start, @Param("end") int end);
 }

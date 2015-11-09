@@ -3,38 +3,48 @@ ${package}
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
-import com.sfpay.map.dao.BaseDao;
-import com.sfpay.map.dao.${Entity}Dao;
+import com.house.building.dao.BaseDao;
+import com.house.building.dao.I${Entity}Dao;
 ${import_entity}
-import com.sfpay.map.mapper.${Entity}Mapper;
+import com.house.building.mapper.I${Entity}Mapper;
+import com.house.building.param.${Entity}QueryParam;
 
 @Repository
-public class ${Entity}DaoImpl extends BaseDao<${Entity}Mapper> implements ${Entity}Dao {
+public class ${Entity}DaoImpl extends BaseDao<I${Entity}Mapper> implements I${Entity}Dao {
 	
-	public ${Entity} get${Entity}(Long id) {
-		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
-		return mapper.get${Entity}(id);
+	@Override
+	public int save(${Entity} param) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.save(param);
 	}
 
-	public ${Entity} save(${Entity} ${entity}) throws Exception {
-		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
-		mapper.save(${entity});
-		return ${entity};
-	}
-	
-	public ${Entity} update(${Entity} ${entity}) throws Exception {
-		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
-		mapper.update(${entity});
-		return ${entity};
-	}
-	
-	public void delete(Long id) throws Exception {
-		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
-		mapper.delete(id);
+	@Override
+	public int update(${Entity} param) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.update(param);
 	}
 
-	public List<${Entity}> list(${Entity} ${entity}) {
-		${Entity}Mapper mapper = getMapper(${Entity}Mapper.class);
-		return mapper.list(${entity});
+	@Override
+	public int deleteById(String id) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.deleteById(id);
+	}
+
+	@Override
+	public ${Entity} getDataById(String id) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.getDataById(id);
+	}
+
+	@Override
+	public int count(${Entity}QueryParam param) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.count(param);
+	}
+
+	@Override
+	public List<${Entity}> query(${Entity}QueryParam param, int start, int end) {
+		I${Entity}Mapper mapper = getMapper(I${Entity}Mapper.class);
+		return mapper.query(param, start, end);
 	}
 }

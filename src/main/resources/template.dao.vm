@@ -2,12 +2,15 @@ ${package}
 
 import java.util.List;
 ${import_entity}
+import com.house.building.param.${Entity}QueryParam;
 
-public interface ${Entity}Dao {
+public interface I${Entity}Dao {
 	
-	public ${Entity} save(${Entity} ${entity}) throws Exception;
-	public ${Entity} update(${Entity} ${entity}) throws Exception;
-	public ${Entity} get${Entity}(Long id);
-	public void delete(Long id) throws Exception;
-	public List<${Entity}> list(${Entity} ${entity});
+	int save(${Entity} param);
+	int update(${Entity} param);
+	int deleteById(String id);
+	${Entity} getDataById(String id);
+	
+	int count(${Entity}QueryParam param);
+	List<${Entity}> query(${Entity}QueryParam param, int start, int end);
 }

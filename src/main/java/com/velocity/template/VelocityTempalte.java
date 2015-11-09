@@ -52,22 +52,54 @@ public class VelocityTempalte {
 	}
 	
 	public static void main(String[] args) {
-		VelocityTempalte vt = new VelocityTempalte("com.house.building.mapper.House", "UTF-8");
+		VelocityTempalte vt = new VelocityTempalte("com.house.building.entity.House", "UTF-8");
 		vt.createTemplate();
 	}
 
 	public void createTemplate() {
 		try {
+			createTemplateEntity();
+			createTemplateParam();
 			createTemplateMapper();
-			//createTemplateMapperXml();
-			//createTemplateDao();
-			//createTemplateService();
-			//createTemplateController();
+			createTemplateMapperXml();
+			createTemplateDao();
+			createTemplateService();
+			createTemplateController();
 			//createTemplateCondition();
 			//createTemplateJSP();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void createTemplateEntity() {
+		template = ve.getTemplate("template.entity.vm", encoding);
+		VelocityContext context = new VelocityContext();
+		String packageName = props.getProperty("package_entity");
+
+		context.put("package", packageName);
+		context.put("import_entity", "import " + clazzName + ";");
+		context.put("Entity", className.get("name1"));
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+		writeJavaFile(props.getProperty("path_entity") + className.get("name1")
+				+ ".java", writer.toString());
+	}
+	
+	private void createTemplateParam() {
+		template = ve.getTemplate("template.param.vm", encoding);
+		VelocityContext context = new VelocityContext();
+		String packageName = props.getProperty("package_param");
+
+		context.put("package", packageName);
+		context.put("import_entity", "import " + clazzName + ";");
+		context.put("Entity", className.get("name1"));
+
+		StringWriter writer = new StringWriter();
+		template.merge(context, writer);
+		writeJavaFile(props.getProperty("path_param") + className.get("name1")
+				+ "QueryParam.java", writer.toString());
 	}
 
 	private void createTemplateCondition() throws Exception {
@@ -215,7 +247,7 @@ public class VelocityTempalte {
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
-		writeJavaFile(props.getProperty("path_mapper") + className.get("name1")
+		writeJavaFile(props.getProperty("path_mapper") + "I" + className.get("name1")
 				+ "Mapper.java", writer.toString());
 	}
 
@@ -225,7 +257,7 @@ public class VelocityTempalte {
 
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
-		EntityReflect entityReflect = new EntityReflect(clazzName);
+		/*EntityReflect entityReflect = new EntityReflect(clazzName);
 
 		StringBuilder results = new StringBuilder("");
 		StringBuilder columns = new StringBuilder("");
@@ -278,9 +310,8 @@ public class VelocityTempalte {
 			wheres.insert(0, "<where>\n").append("</where>");
 		}
 		context.put("wheres", wheres.toString());
-
-		String tableName = entityReflect.getTableName();
-		context.put("table", tableName);
+		String tableName = entityReflect.getTableName();*/
+		context.put("table", className.get("name1").toUpperCase());
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
@@ -301,7 +332,7 @@ public class VelocityTempalte {
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
-		writeJavaFile(props.getProperty("path_dao") + className.get("name1")
+		writeJavaFile(props.getProperty("path_dao") + "I" + className.get("name1")
 				+ "Dao.java", writer.toString());
 
 		template = ve.getTemplate("template.dao.impl.vm", encoding);
@@ -328,7 +359,7 @@ public class VelocityTempalte {
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(
-				props.getProperty("path_service") + className.get("name1")
+				props.getProperty("path_service") + "I" + className.get("name1")
 						+ "Service.java", writer.toString());
 
 		template = ve.getTemplate("template.service.impl.vm", encoding);
@@ -356,7 +387,7 @@ public class VelocityTempalte {
 		template.merge(context, writer);
 		writeJavaFile(
 				props.getProperty("path_controller") + className.get("name1")
-						+ "Controller.java", writer.toString());
+						+ "ManageController.java", writer.toString());
 	}
 
 	private Properties getProperties() {

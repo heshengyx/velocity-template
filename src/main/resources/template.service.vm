@@ -1,13 +1,15 @@
 ${package}
 
-import java.util.List;
 ${import_entity}
+import com.house.building.page.IPage;
+import com.house.building.param.${Entity}QueryParam;
 
-public interface ${Entity}Service {
+public interface I${Entity}Service {
 
-	public ${Entity} save(${Entity} ${entity}) throws Exception;
-	public ${Entity} update(${Entity} ${entity}) throws Exception;
-	public ${Entity} get${Entity}(Long id);
-	public void delete(Long id) throws Exception;
-	public List<${Entity}> list(${Entity} ${entity});
+	void save(${Entity} param);
+	void update(${Entity} param);
+	void deleteById(String id);
+	${Entity} getDataById(String id);
+	
+	IPage<${Entity}> query(${Entity}QueryParam param, int page, int rows);
 }

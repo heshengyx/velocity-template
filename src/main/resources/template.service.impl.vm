@@ -5,34 +5,65 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sfpay.map.dao.${Entity}Dao;
+import com.house.building.dao.I${Entity}Dao;
 ${import_entity}
-import com.sfpay.map.service.${Entity}Service;
+import com.house.building.page.IPage;
+import com.house.building.page.Page;
+import com.house.building.service.I${Entity}Service;
+import com.house.building.param.${Entity}QueryParam;
+import com.myself.common.exception.ServiceException;
+import com.myself.common.utils.UIDGeneratorUtil;
 
 @Component
-public class ${Entity}ServiceImpl implements ${Entity}Service {
+public class ${Entity}ServiceImpl implements I${Entity}Service {
 
 	@Autowired
-	private ${Entity}Dao ${entity}Dao;
+	private I${Entity}Dao ${entity}Dao;
 	
-	public ${Entity} get${Entity}(Long id) {
-		return ${entity}Dao.get${Entity}(id);
+	@Override
+	public void save(${Entity} param) {
+		param.setId(UIDGeneratorUtil.getUID());
+		param.setStatus("1");
+		param.setCreateTime(new Date());
+		int count = ${entity}Dao.save(param);
+		if (count < 1) {
+			throw new ServiceException("新增失败");
+		}
 	}
 
-	public ${Entity} save(${Entity} ${entity}) throws Exception {
-		${entity}.setCreateTime(new Date());
-		return ${entity}Dao.save(${entity});
+	@Override
+	public void update(${Entity} param) {
+		param.setUpdateTime(new Date());
+		int count = ${entity}Dao.update(param);
+		if (count < 1) {
+			throw new ServiceException("更新失败");
+		}
 	}
-	
-	public ${Entity} update(${Entity} ${entity}) throws Exception {
-		return ${entity}Dao.update(${entity});
+
+	@Override
+	public void deleteById(String id) {
+		int count = ${entity}Dao.deleteById(id);
+		if (count < 1) {
+			throw new ServiceException("删除失败");
+		}
 	}
-	
-	public void delete(Long id) throws Exception {
-		${entity}Dao.delete(id);
+
+	@Override
+	public ${Entity} getDataById(String id) {
+		return ${entity}Dao.getDataById(id);
 	}
-	
-	public List<${Entity}> list(${Entity} ${entity}) {
-		return ${entity}Dao.list(${entity});
+
+	@Override
+	public IPage<${Entity}> query(${Entity}QueryParam param, int page, int rows) {
+		List<${Entity}> list = null;
+		page = page <= 0 ? 1 : page;
+		rows = rows <= 0 ? 10 : rows;
+		int count = ${entity}Dao.count(param);
+		if (count > 0) {
+			int start = (page - 1) * rows;
+			int end = start + rows;
+			list = ${entity}Dao.query(param, start, end);
+		}
+		return new Page<${Entity}>(list, count, page, rows);
 	}
 }

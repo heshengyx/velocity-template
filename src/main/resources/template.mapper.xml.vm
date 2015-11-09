@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sfpay.map.mapper.${Entity}Mapper">
-	<resultMap type="${Entity}" id="${entity}Result">
-		<id column="ID" property="id" jdbcType="NUMERIC" />
-		${results}
+<mapper namespace="com.house.building.mapper.I${Entity}Mapper">
+	<resultMap type="com.house.building.entity.${Entity}" id="${entity}Result">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+<result column="STATUS" property="status" jdbcType="VARCHAR" />
+<result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+<result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
 	</resultMap>
+
+	<sql id="sqlQuery">
+		FROM ${table} a where 1=1
+	</sql>
 	
-	<select id="get${Entity}" parameterType="int" resultType="${Entity}">
-		select * from ${table} where ID=#{id, jdbcType=NUMERIC}
+	<select id="getDataById" resultMap="${entity}Result">
+		SELECT * FROM ${table} WHERE ID = #{id, jdbcType=VARCHAR}
 	</select>
-	<select id="list" parameterType="${Entity}" resultMap="${entity}Result">
-		select * from ${table} 
-		${wheres} 
-		order by CREATE_TIME desc
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="sqlQuery"/>
+	</select>
+	<select id="query" resultMap="${entity}Result">
+		SELECT a.* <include refid="sqlQuery"/>
+			order by a.CREATE_TIME desc limit #{start, jdbcType=INTEGER}, #{end, jdbcType=INTEGER}
 	</select>
 	
-	<insert id="save" parameterType="${Entity}">
-		INSERT INTO ${table} (${columns})
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ${table} (ID, STATUS, CREATE_TIME, REMARKS)
 		VALUES (
-		${values})
+#{param.id, jdbcType=VARCHAR},
+#{param.status, jdbcType=VARCHAR},
+#{param.createTime, jdbcType=TIMESTAMP},
+#{param.remarks, jdbcType=VARCHAR})
 	</insert>
 	
-	<update id="update" parameterType="${Entity}">
+	<update id="update">
 		update ${table}
 		<set>
-			${sets}
+UPDATE_TIME = #{param.updateTime, jdbcType=TIMESTAMP},
 		</set>
-		where id = #{id, jdbcType=NUMERIC}
+		where id = #{param.id, jdbcType=VARCHAR}
 	</update>
-	<delete id="delete" parameterType="int">
-		delete from ${table} where id = #{id, jdbcType=NUMERIC}
+	
+	<delete id="deleteById">
+		delete from ${table} a where a.ID = #{id, jdbcType=VARCHAR}
 	</delete>
 </mapper>
