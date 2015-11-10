@@ -1,7 +1,11 @@
 package com.velocity.template;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -9,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -45,15 +48,17 @@ public class VelocityTempalte {
 		Map<String, String> map = new HashMap<String, String>();
 		int index = this.clazzName.lastIndexOf(".") + 1;
 		String name1 = this.clazzName.substring(index);
-		String name2 = name1.toLowerCase();
+		String name2 = String.valueOf(name1.charAt(0)).toLowerCase() + name1.substring(1);
 		map.put("name1", name1);
 		map.put("name2", name2);
 		return map;
 	}
 	
 	public static void main(String[] args) {
-		VelocityTempalte vt = new VelocityTempalte("com.house.building.entity.House", "UTF-8");
+		VelocityTempalte vt = new VelocityTempalte("com.house.building.entity.HouseImage", "UTF-8");
 		vt.createTemplate();
+		//File file = new File("D:\\work\\git-work\\building-core\\src\\main\\resources\\hessian-servlet.xml");  //我的文件在C盘下
+		//System.out.println(readToString(file));
 	}
 
 	public void createTemplate() {
@@ -61,17 +66,66 @@ public class VelocityTempalte {
 			createTemplateEntity();
 			createTemplateParam();
 			createTemplateMapper();
-			createTemplateMapperXml();
+			createTemplateMapperXml("HOUSE_IMAGE");
 			createTemplateDao();
 			createTemplateService();
 			createTemplateController();
 			//createTemplateCondition();
-			//createTemplateJSP();
+			createTemplateJSP("房源图片");
+			createTemplateConf();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	private void createTemplateConf() {
+		String name1 = className.get("name1");
+		String name2 = className.get("name2");
+		
+		StringBuffer sb = new StringBuffer("");
+		String path = props.getProperty("path_hessian_service");
+		File file = new File(path + "hessian-servlet.xml"); 
+		String content = readToString(file);
+		if (!content.contains(name2 + "Service")) {
+			sb.append("<bean name=\"/" + name2 + "Service\" class=\"org.springframework.remoting.caucho.HessianServiceExporter\">\n");
+			sb.append("        <property name=\"service\" ref=\"" + name2 + "Service\" />\n");
+			sb.append("        <property name=\"serviceInterface\" value=\"com.house.building.service.I" + name1 + "Service\" />\n");
+			sb.append("    </bean>\n");
+			sb.append("    <!-- hessian-servlet-conf -->");
+			content = content.replace("<!-- hessian-servlet-conf -->", sb.toString());
+			writeJavaFile(path + "hessian-servlet.xml", content);
+		}
+		
+		path = props.getProperty("path_application_web");
+		file = new File(path + "application-web.xml");
+		content = readToString(file);
+		if (!content.contains(name2 + "Service")) {
+			sb = new StringBuffer("");
+			sb.append("<bean id=\"" + name2 + "Service\" class=\"org.springframework.remoting.caucho.HessianProxyFactoryBean\">\n");
+			sb.append("        <property name=\"serviceUrl\">\n");
+			sb.append("            <value>http://localhost:8085/hessian/" + name2 + "Service</value>\n");
+			sb.append("        </property>\n");
+			sb.append("        <property name=\"serviceInterface\">\n");
+			sb.append("            <value>com.house.building.service.I" + name1 + "Service</value>\n");
+			sb.append("        </property>\n");
+			sb.append("    </bean>\n");
+			sb.append("    <!-- application-web-conf -->");
+			content = content.replace("<!-- application-web-conf -->", sb.toString());
+			writeJavaFile(path + "application-web.xml", content);
+		}
+		
+		path = props.getProperty("path_sitemesh");
+		file = new File(path + "sitemesh3.xml");
+		content = readToString(file);
+		if (!content.contains("manage/" + name2)) {
+			sb = new StringBuffer("");
+			sb.append("<mapping path=\"/manage/" + name2 + "\" decorator=\"/WEB-INF/layout/mainLayout.jsp\"/>\n");
+			sb.append("    <!-- sitemesh-conf -->");
+			content = content.replace("<!-- sitemesh-conf -->", sb.toString());
+			writeJavaFile(path + "sitemesh3.xml", content);
+		}
+	}
+
 	private void createTemplateEntity() {
 		template = ve.getTemplate("template.entity.vm", encoding);
 		VelocityContext context = new VelocityContext();
@@ -147,10 +201,11 @@ public class VelocityTempalte {
 		}
 	}
 
-	private void createTemplateJSP() throws Exception {
-		template = ve.getTemplate("template.web.list.vm", encoding);
+	private void createTemplateJSP(String title) throws Exception {
+		//template = ve.getTemplate("template.web.list.vm", encoding);
+		template = ve.getTemplate("template.jsp.list.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		EntityReflect entityReflect = new EntityReflect(clazzName);
+		/*EntityReflect entityReflect = new EntityReflect(clazzName);
 		List<EntityAnnotation> fileds = entityReflect.getFields();
 		
 		StringBuilder ths = new StringBuilder("");
@@ -227,12 +282,23 @@ public class VelocityTempalte {
 		if (length > 0) {
 			conditions.delete(length-2, length-1);
 		}
-		context.put("conditions", conditions.toString());
+		context.put("conditions", conditions.toString());*/
+		context.put("entity", className.get("name2"));
+		context.put("title", title);
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
-		writeJavaFile(props.getProperty("path_jsp") + className.get("name2")
-				+ "/" + className.get("name2") + "-list.jsp", writer.toString());
+		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-list.jsp", writer.toString());
+		
+		template = ve.getTemplate("template.jsp.add.vm", encoding);
+		writer = new StringWriter();
+		template.merge(context, writer);
+		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-add.jsp", writer.toString());
+		
+		template = ve.getTemplate("template.jsp.edit.vm", encoding);
+		writer = new StringWriter();
+		template.merge(context, writer);
+		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-edit.jsp", writer.toString());
 	}
 
 	private void createTemplateMapper() {
@@ -251,7 +317,7 @@ public class VelocityTempalte {
 				+ "Mapper.java", writer.toString());
 	}
 
-	private void createTemplateMapperXml() throws Exception {
+	private void createTemplateMapperXml(String table) throws Exception {
 		template = ve.getTemplate("template.mapper.xml.vm", encoding);
 		VelocityContext context = new VelocityContext();
 
@@ -311,7 +377,7 @@ public class VelocityTempalte {
 		}
 		context.put("wheres", wheres.toString());
 		String tableName = entityReflect.getTableName();*/
-		context.put("table", className.get("name1").toUpperCase());
+		context.put("table", table);
 
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
@@ -419,5 +485,20 @@ public class VelocityTempalte {
 				ex.printStackTrace();
 			}
 		}
+	}
+	
+	public static String readToString(File file) {
+		Long filelength = file.length(); // 获取文件长度
+		byte[] filecontent = new byte[filelength.intValue()];
+		try {
+			FileInputStream in = new FileInputStream(file);
+			in.read(filecontent);
+			in.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new String(filecontent);// 返回文件内容,默认编码
 	}
 }

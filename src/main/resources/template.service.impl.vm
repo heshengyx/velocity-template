@@ -3,7 +3,7 @@ ${package}
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.house.building.dao.I${Entity}Dao;
 ${import_entity}
@@ -14,7 +14,7 @@ import com.house.building.param.${Entity}QueryParam;
 import com.myself.common.exception.ServiceException;
 import com.myself.common.utils.UIDGeneratorUtil;
 
-@Component
+@Service("${entity}Service")
 public class ${Entity}ServiceImpl implements I${Entity}Service {
 
 	@Autowired
