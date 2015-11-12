@@ -1,13 +1,13 @@
-${package}
+package ${package}.dao.impl;
 
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
-import com.house.building.dao.BaseDao;
-import com.house.building.dao.I${Entity}Dao;
-${import_entity}
-import com.house.building.mapper.I${Entity}Mapper;
-import com.house.building.param.${Entity}QueryParam;
+import ${package}.dao.BaseDao;
+import ${package}.dao.I${Entity}Dao;
+import ${package}.entity.${Entity};
+import ${package}.mapper.I${Entity}Mapper;
+import ${package}.param.${Entity}QueryParam;
 
 @Repository
 public class ${Entity}DaoImpl extends BaseDao<I${Entity}Mapper> implements I${Entity}Dao {

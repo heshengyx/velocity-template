@@ -1,8 +1,8 @@
-${package}
+package ${package}.service;
 
-${import_entity}
-import com.house.building.page.IPage;
-import com.house.building.param.${Entity}QueryParam;
+import ${package}.entity.${Entity};
+import ${package}.page.IPage;
+import ${package}.param.${Entity}QueryParam;
 
 public interface I${Entity}Service {
 

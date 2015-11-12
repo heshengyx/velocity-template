@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.house.building.mapper.I${Entity}Mapper">
-	<resultMap type="com.house.building.entity.${Entity}" id="${entity}Result">
+<mapper namespace="${package}.mapper.I${Entity}Mapper">
+	<resultMap type="${package}.entity.${Entity}" id="${entity}Result">
 		<id column="ID" property="id" jdbcType="VARCHAR" />
 <result column="STATUS" property="status" jdbcType="VARCHAR" />
 <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />

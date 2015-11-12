@@ -1,4 +1,4 @@
-${package}
+package ${package}.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-${import_entity}
-import com.house.building.param.${Entity}QueryParam;
-import com.house.building.service.I${Entity}Service;
+import ${package}.entity.${Entity};
+import ${package}.param.${Entity}QueryParam;
+import ${package}.service.I${Entity}Service;
 import com.myself.common.exception.ServiceException;
 import com.myself.common.message.JsonMessage;
 

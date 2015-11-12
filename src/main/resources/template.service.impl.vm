@@ -1,16 +1,16 @@
-${package}
+package ${package}.service.impl;
 
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.house.building.dao.I${Entity}Dao;
-${import_entity}
-import com.house.building.page.IPage;
-import com.house.building.page.Page;
-import com.house.building.service.I${Entity}Service;
-import com.house.building.param.${Entity}QueryParam;
+import ${package}.dao.I${Entity}Dao;
+import ${package}.entity.${Entity};
+import ${package}.page.IPage;
+import ${package}.page.Page;
+import ${package}.service.I${Entity}Service;
+import ${package}.param.${Entity}QueryParam;
 import com.myself.common.exception.ServiceException;
 import com.myself.common.utils.UIDGeneratorUtil;
 

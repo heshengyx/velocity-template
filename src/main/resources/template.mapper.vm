@@ -1,9 +1,9 @@
-${package}
+package ${package}.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-${import_entity}
-import com.house.building.param.${Entity}QueryParam;
+import ${package}.entity.${Entity};
+import ${package}.param.${Entity}QueryParam;
 
 public interface I${Entity}Mapper {
 	

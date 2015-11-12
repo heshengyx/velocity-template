@@ -1,8 +1,8 @@
-${package}
+package ${package}.dao;
 
 import java.util.List;
-${import_entity}
-import com.house.building.param.${Entity}QueryParam;
+import ${package}.entity.${Entity};
+import ${package}.param.${Entity}QueryParam;
 
 public interface I${Entity}Dao {
 	

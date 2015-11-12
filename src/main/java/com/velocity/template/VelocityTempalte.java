@@ -49,13 +49,15 @@ public class VelocityTempalte {
 		int index = this.clazzName.lastIndexOf(".") + 1;
 		String name1 = this.clazzName.substring(index);
 		String name2 = String.valueOf(name1.charAt(0)).toLowerCase() + name1.substring(1);
+		String packageName = this.clazzName.substring(0, this.clazzName.indexOf(".entity"));
 		map.put("name1", name1);
 		map.put("name2", name2);
+		map.put("packageName", packageName);
 		return map;
 	}
 	
 	public static void main(String[] args) {
-		VelocityTempalte vt = new VelocityTempalte("com.house.building.entity.HouseImage", "UTF-8");
+		VelocityTempalte vt = new VelocityTempalte("com.root.helper.entity.SuperFile", "UTF-8");
 		vt.createTemplate();
 		//File file = new File("D:\\work\\git-work\\building-core\\src\\main\\resources\\hessian-servlet.xml");  //我的文件在C盘下
 		//System.out.println(readToString(file));
@@ -63,16 +65,16 @@ public class VelocityTempalte {
 
 	public void createTemplate() {
 		try {
-			createTemplateEntity();
-			createTemplateParam();
-			createTemplateMapper();
-			createTemplateMapperXml("HOUSE_IMAGE");
-			createTemplateDao();
-			createTemplateService();
-			createTemplateController();
+			//createTemplateEntity();
+			//createTemplateParam();
+			//createTemplateMapper();
+			//createTemplateMapperXml("SUPER_FILE");
+			//createTemplateDao();
+			//createTemplateService();
+			//createTemplateController();
 			//createTemplateCondition();
-			createTemplateJSP("房源图片");
-			createTemplateConf();
+			createTemplateJSP("SU文件");
+			//createTemplateConf();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,10 +131,8 @@ public class VelocityTempalte {
 	private void createTemplateEntity() {
 		template = ve.getTemplate("template.entity.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_entity");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 
 		StringWriter writer = new StringWriter();
@@ -144,10 +144,8 @@ public class VelocityTempalte {
 	private void createTemplateParam() {
 		template = ve.getTemplate("template.param.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_param");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 
 		StringWriter writer = new StringWriter();
@@ -304,10 +302,8 @@ public class VelocityTempalte {
 	private void createTemplateMapper() {
 		template = ve.getTemplate("template.mapper.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_mapper");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
 
@@ -321,6 +317,7 @@ public class VelocityTempalte {
 		template = ve.getTemplate("template.mapper.xml.vm", encoding);
 		VelocityContext context = new VelocityContext();
 
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
 		/*EntityReflect entityReflect = new EntityReflect(clazzName);
@@ -389,10 +386,8 @@ public class VelocityTempalte {
 	private void createTemplateDao() {
 		template = ve.getTemplate("template.dao.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_dao");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
 
@@ -402,8 +397,7 @@ public class VelocityTempalte {
 				+ "Dao.java", writer.toString());
 
 		template = ve.getTemplate("template.dao.impl.vm", encoding);
-		packageName = props.getProperty("package_dao_impl");
-		context.put("package", packageName);
+		context.put("package", className.get("packageName"));
 
 		writer = new StringWriter();
 		template.merge(context, writer);
@@ -415,10 +409,8 @@ public class VelocityTempalte {
 	private void createTemplateService() {
 		template = ve.getTemplate("template.service.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_service");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
 
@@ -429,8 +421,7 @@ public class VelocityTempalte {
 						+ "Service.java", writer.toString());
 
 		template = ve.getTemplate("template.service.impl.vm", encoding);
-		packageName = props.getProperty("package_service_impl");
-		context.put("package", packageName);
+		context.put("package", className.get("packageName"));
 
 		writer = new StringWriter();
 		template.merge(context, writer);
@@ -442,10 +433,8 @@ public class VelocityTempalte {
 	private void createTemplateController() {
 		template = ve.getTemplate("template.controller.vm", encoding);
 		VelocityContext context = new VelocityContext();
-		String packageName = props.getProperty("package_controller");
 
-		context.put("package", packageName);
-		context.put("import_entity", "import " + clazzName + ";");
+		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
 
@@ -460,7 +449,7 @@ public class VelocityTempalte {
 		Properties props = new Properties();
 		try {
 			props.load(VelocityTempalte.class
-					.getResourceAsStream("/template.properties"));
+					.getResourceAsStream("/template.helper.properties"));
 		} catch (Exception e) {
 			System.err.println("不能读取属性文件，请确保属性文件在你的classpath中");
 		}
