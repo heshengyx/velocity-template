@@ -10,9 +10,7 @@
 	
 	<div class="form-group">
 		<div class="col-md-offset-2 col-md-10">
-			<button class="btn btn-sm btn-info" type="button" id="btn-save"><i class="icon-ok bigger-110"></i>保 存</button>
-			&nbsp; &nbsp; &nbsp;
-			<button class="btn btn-sm" type="button" id="btn-close"><i class="icon-undo bigger-110"></i>关 闭</button>
+			<button class="btn btn-sm btn-info" type="button" id="btn-save"><i class="icon-save bigger-110"></i>保 存</button>
 		</div>
 	</div>
 </form>
