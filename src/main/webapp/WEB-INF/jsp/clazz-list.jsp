@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>${title}管理</title>
+		<title>类文件管理</title>
 		<link rel="stylesheet" href="${ctx}/css/ui-dialog.css" />
 	</head>
 
@@ -19,7 +19,7 @@
 						<i class="icon-home home-icon"></i>
 						<a href="${ctx}/manage">首页</a>
 					</li>
-					<li class="active">${title}管理</li>
+					<li class="active">类文件管理</li>
 				</ul>
 			</div>
 
@@ -33,6 +33,7 @@
 									<input type="text" id="buildingNameQuery" placeholder="名称" class="col-xs-10 col-sm-5" />
 								</div>
 							</div>
+							
 							
 							<div class="form-group">
 								<div class="col-md-offset-1 col-md-11">
@@ -63,10 +64,13 @@
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({
-				url: "${ctx}/manage/${entity}/query",
+				url: "${ctx}/manage/clazz/query",
 				datatype: "json",
 				colModel: [
 					{label:'id', name:'id', key:true, index:'id', hidden:true},
+					{label:'类名', name:'clazzName', index:'clazzName'},
+					{label:'表名', name:'tableName', index:'tableName'},
+					{label:'标题', name:'title', index:'title'},
 					{label:'创建时间', name:'createTime', index:'createTime', width:100, formatter:to_date_hms},
 					{label:'操作', name:'opts', index:'opts', width:50, align:'center', formatter: function(cellval, options, row) {
 						var content = "";
@@ -90,7 +94,7 @@
 					repeatitems : false
 				},
 			   	viewrecords: true,
-			   	//multiselect: true,
+			   	multiselect: true,
 			   	//altRows: true,
 			   	//multiboxonly: true,
 			   	loadComplete : function() {
@@ -102,18 +106,19 @@
 						enableTooltips(table);
 					}, 0); */
 				},
-				caption: "${title}列表",
+				caption: "类文件列表",
 				autowidth: true
 			});
-			
+
 			$('#btn-search').click(function() {
 				doSearch();
 			});
 			$("#btn-add").click(function() {
-				var url = "${ctx}/manage/${entity}/add?random=" + Math.random();
+				var url = "${ctx}/manage/clazz/add?random=" + Math.random();
 				var options = {
 					title: '新增',
-					width: 500
+					width: 700,
+					heigth: 500
 				};
 				showDialog(url, options);
 			});
@@ -169,7 +174,7 @@
 			var page = $("#dataGridTable").jqGrid("getGridParam", "page");
 			$("#dataGridTable").clearGridData();
 			$("#dataGridTable").jqGrid("setGridParam", {
-				url : "${ctx}/manage/${entity}/query?random="+ Math.random(),
+				url : "${ctx}/manage/clazz/query?random="+ Math.random(),
 				page : page,
 				postData : {
 					//buildingName : $.trim($("#buildingName").val())
@@ -178,7 +183,7 @@
 			}).trigger("reloadGrid");
 		}
 		function doModify(id) {
-			var url = "${ctx}/manage/${entity}/edit?id=" + id + "&random=" + Math.random();
+			var url = "${ctx}/manage/clazz/edit?id=" + id + "&random=" + Math.random();
 			var options = {
 				title: '编辑',
 				width: 500
@@ -193,7 +198,7 @@
 			    okValue: '确定',
 			    ok: function () {
 			        this.title('删除中…');
-			        var url = "${ctx}/manage/${entity}/delete?random="+ Math.random();
+			        var url = "${ctx}/manage/clazz/delete?random="+ Math.random();
 					var params = {
 						id: id
 					};

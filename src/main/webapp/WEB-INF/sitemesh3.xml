@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<!-- 对不同的路径，启用不同的装饰器 -->
+	<mapping path="/manage" decorator="/WEB-INF/layout/mainLayout.jsp"/>
+	<mapping path="/manage/clazz" decorator="/WEB-INF/layout/mainLayout.jsp"/>
+	<!-- sitemesh-conf -->
+	
+	<!-- 排除，不进行装饰的路径 -->
+	<mapping path="/avatars/*" exclude="true"/>
+	<mapping path="/images/*" exclude="true"/>
+	<mapping path="/css/*" exclude="true"/>
+	<mapping path="/js/*" exclude="true"/>
+	<mapping path="/fonts/*" exclude="true"/>
+	<mapping path="/locales/*" exclude="true"/>
+	<mapping path="/plugins/*" exclude="true"/>
+	<mapping path="/uploads/*" exclude="true"/>
+	
+	<!-- 自定义 tag 规则 -->
+	<content-processor>
+		<tag-rule-bundle class="com.velocity.template.tag.NavTitleTagRuleBundle" />
+		<tag-rule-bundle class="com.velocity.template.tag.JscriptTagRuleBundle" />
+	</content-processor>
+</sitemesh>

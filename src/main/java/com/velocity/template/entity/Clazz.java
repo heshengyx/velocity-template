@@ -1,24 +1,43 @@
-package ${package}.entity;
+package com.velocity.template.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class ${Entity} implements Serializable {
+public class Clazz implements Serializable {
 
 	private String id;
-	${attributes}
+	private String clazzName;
+	private String tableName;
+	private String title;
 	private String status;
 	private Date createTime;
 	private Date updateTime;
 	private String remarks;
 	
+	public String getClazzName() {
+		return clazzName;
+	}
+	public void setClazzName(String clazzName) {
+		this.clazzName = clazzName;
+	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	${methods}
 	public String getStatus() {
 		return status;
 	}

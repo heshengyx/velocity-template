@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>${title}管理</title>
+		<title>类属性管理</title>
 		<link rel="stylesheet" href="${ctx}/css/ui-dialog.css" />
 	</head>
 
@@ -19,7 +19,7 @@
 						<i class="icon-home home-icon"></i>
 						<a href="${ctx}/manage">首页</a>
 					</li>
-					<li class="active">${title}管理</li>
+					<li class="active">类属性管理</li>
 				</ul>
 			</div>
 
@@ -63,7 +63,7 @@
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({
-				url: "${ctx}/manage/${entity}/query",
+				url: "${ctx}/manage/attribute/query",
 				datatype: "json",
 				colModel: [
 					{label:'id', name:'id', key:true, index:'id', hidden:true},
@@ -102,7 +102,7 @@
 						enableTooltips(table);
 					}, 0); */
 				},
-				caption: "${title}列表",
+				caption: "类属性列表",
 				autowidth: true
 			});
 			
@@ -110,7 +110,7 @@
 				doSearch();
 			});
 			$("#btn-add").click(function() {
-				var url = "${ctx}/manage/${entity}/add?random=" + Math.random();
+				var url = "${ctx}/manage/attribute/add?random=" + Math.random();
 				var options = {
 					title: '新增',
 					width: 500
@@ -169,7 +169,7 @@
 			var page = $("#dataGridTable").jqGrid("getGridParam", "page");
 			$("#dataGridTable").clearGridData();
 			$("#dataGridTable").jqGrid("setGridParam", {
-				url : "${ctx}/manage/${entity}/query?random="+ Math.random(),
+				url : "${ctx}/manage/attribute/query?random="+ Math.random(),
 				page : page,
 				postData : {
 					//buildingName : $.trim($("#buildingName").val())
@@ -178,7 +178,7 @@
 			}).trigger("reloadGrid");
 		}
 		function doModify(id) {
-			var url = "${ctx}/manage/${entity}/edit?id=" + id + "&random=" + Math.random();
+			var url = "${ctx}/manage/attribute/edit?id=" + id + "&random=" + Math.random();
 			var options = {
 				title: '编辑',
 				width: 500
@@ -193,7 +193,7 @@
 			    okValue: '确定',
 			    ok: function () {
 			        this.title('删除中…');
-			        var url = "${ctx}/manage/${entity}/delete?random="+ Math.random();
+			        var url = "${ctx}/manage/attribute/delete?random="+ Math.random();
 					var params = {
 						id: id
 					};

@@ -1,0 +1,1 @@
+java -cp ../lib/hsqldb.jar org.hsqldb.Server -database.0 templatedb -dbname.0 template_db
