@@ -10,11 +10,18 @@ public class Attribute implements Serializable {
 	private String attributeName;
 	private String attributeTitle;
 	private String attributeType;
+	private String attributeSearch;
 	private String status;
 	private Date createTime;
 	private Date updateTime;
 	private String remarks;
 	
+	public String getAttributeSearch() {
+		return attributeSearch;
+	}
+	public void setAttributeSearch(String attributeSearch) {
+		this.attributeSearch = attributeSearch;
+	}
 	public String getClazzId() {
 		return clazzId;
 	}

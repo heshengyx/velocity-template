@@ -38,7 +38,12 @@
     <td role="gridcell"><input role="checkbox" name="attributeBox" class="cbox" type="checkbox"></td>
     <td role="gridcell"><input type="text" name="attributeNameAdd" class="attributeNameAdd" placeholder="属性名称" /></td>
     <td role="gridcell"><input type="text" name="attributeTitleAdd" class="attributeTitleAdd" placeholder="属性标题" /></td>
-    <td role="gridcell"><input type="text" name="attributeTypeAdd" class="attributeTypeAdd" placeholder="属性类型" /></td>
+    <td role="gridcell">
+    <select name="attributeTypeAdd" class="attributeTypeAdd">
+    	<option value="String">String</option>
+    	<option value="Date">Date</option>
+    	<option value="int">int</option>
+    </select></td>
   </tr>
 </table>
 <script type="text/javascript">	
@@ -49,7 +54,8 @@ $(document).ready(function() {
 		colModel: [
 			{label:'属性名称', name:'attributeName', index:'attributeName', sortable:false},
 			{label:'属性标题', name:'attributeTitle', index:'attributeTitle', sortable:false},
-			{label:'属性类型', name:'attributeType', index:'attributeType', sortable:false}
+			{label:'属性类型', name:'attributeType', index:'attributeType', sortable:false},
+			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false}
 		],
 	   	viewrecords: true,
 	   	multiselect: true,
