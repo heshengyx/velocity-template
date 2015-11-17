@@ -93,7 +93,7 @@ public class VelocityTemplate {
 
 	public void createTemplate() {
 		try {
-			//createTemplateEntity();
+			createTemplateEntity();
 			createTemplateParam();
 			/*createTemplateMapper();
 			createTemplateMapperXml("ATTRIBUTE");

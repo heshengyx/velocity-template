@@ -35,7 +35,6 @@
 </form>
 <table id="gridTable">
   <tr role="row" class="ui-widget-content jqgrow ui-row-ltr">
-    <td role="gridcell"><input role="checkbox" name="attributeBox" class="cbox" type="checkbox"></td>
     <td role="gridcell"><input type="text" name="attributeNameAdd" class="attributeNameAdd" style="width:80px;" placeholder="属性名称" /></td>
     <td role="gridcell"><input type="text" name="attributeTitleAdd" class="attributeTitleAdd" style="width:80px;" placeholder="属性标题" /></td>
     <td role="gridcell">
@@ -44,7 +43,7 @@
     	<option value="Date">Date</option>
     	<option value="int">int</option>
     </select></td>
-    <td role="gridcell"><input role="checkbox" name="attributeSearch" class="cbox" type="checkbox"></td>
+    <td role="gridcell"><input role="checkbox" name="attributeSearchAdd" class="attributeSearchAdd" type="checkbox" value="1"></td>
   </tr>
 </table>
 <script type="text/javascript">	
@@ -59,7 +58,7 @@ $(document).ready(function() {
 			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false, width:80}
 		],
 	   	viewrecords: true,
-	   	multiselect: true,
+	   	//multiselect: true,
 	   	loadComplete : function() {
 			/* var table = this;
 			setTimeout(function(){
@@ -86,62 +85,69 @@ $(document).ready(function() {
 		var attributeNames = getValues("#attributeGridTable .attributeNameAdd");
 		var attributeTitles = getValues("#attributeGridTable .attributeTitleAdd");
 		var attributeTypes = getValues("#attributeGridTable .attributeTypeAdd");
-		var url = "${ctx}/manage/clazz/save?random="+ Math.random();
-		var params = {
-			title: $("#titleAdd").val(),
-			clazzName: $("#clazzNameAdd").val(),
-			tableName: $("#tableNameAdd").val(),
-			attributeName: attributeNames,
-			attributeTitle: attributeTitles,
-			attributeType: attributeTypes
-		};
-		$.ajax({  
-            type: 'post',  
-            dataType: "json",
-            url: url,  
-            data: params,  
-            traditional: true, 
-            success: function(result){  
-            	dialog({
-    			    title: '消息',
-    			    width: 200,
-    			    content: result.message,
-    			    okValue: '确定',
-    			    ok: function () {
-    			    	if (result.code == "500") {
-    			    		return true;	
-    			    	} else {
-    			    		_myDialog.close().remove();
-    		                doSearch();	
-    			    	}
-    		    	},
-    			    cancel: false
-    			}).showModal();
-            }  
-        }); 
-		/* $.post(url, params, function(result) {
+		var attributeSearchs = getBoxValues("#attributeGridTable .attributeSearchAdd");
+		if (attributeNames.length > 0) {
+			var url = "${ctx}/manage/clazz/save?random="+ Math.random();
+			var params = {
+				title: $("#titleAdd").val(),
+				clazzName: $("#clazzNameAdd").val(),
+				tableName: $("#tableNameAdd").val(),
+				attributeName: attributeNames,
+				attributeTitle: attributeTitles,
+				attributeType: attributeTypes,
+				attributeSearch: attributeSearchs
+			};
+			$.ajax({  
+	            type: 'post',  
+	            dataType: "json",
+	            url: url,  
+	            data: params,  
+	            traditional: true, 
+	            success: function(result){  
+	            	dialog({
+	    			    title: '消息',
+	    			    width: 200,
+	    			    content: result.message,
+	    			    okValue: '确定',
+	    			    ok: function () {
+	    			    	if (result.code == "500") {
+	    			    		return true;	
+	    			    	} else {
+	    			    		_myDialog.close().remove();
+	    		                doSearch();	
+	    			    	}
+	    		    	},
+	    			    cancel: false
+	    			}).showModal();
+	            }  
+	        });
+		} else {
 			dialog({
 			    title: '消息',
 			    width: 200,
-			    content: result.message,
-			    okValue: '确定',
-			    ok: function () {
-			    	if (result.code == "500") {
-			    		return true;	
-			    	} else {
-			    		_myDialog.close().remove();
-		                doSearch();	
-			    	}
-		    	},
-			    cancel: false
+			    content: '请至少添加一个属性',
+			  	okValue: '确定',
+		    	ok: true,
+		    	cancel: false
 			}).showModal();
-		}, "json"); */
+		}
 	});
 });
 function getValues(className) {
 	var values = [];
 	$(className).each(function(){
 		values.push($(this).val());
+	});
+	return values;
+}
+function getBoxValues(className) {
+	var values = [];
+	$(className).each(function(){
+		if ($(this).is(':checked')) {
+			values.push($(this).val());
+		} else {
+			values.push("0");
+		}
 	});
 	return values;
 }

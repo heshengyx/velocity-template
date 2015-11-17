@@ -84,7 +84,7 @@ public class ClazzServiceImpl implements IClazzService {
 		clazz.setClazzName(param.getClazzName());
 		clazz.setTableName(param.getTableName());
 		clazz.setTitle(param.getTitle());
-		save(clazz);
+		//save(clazz);
 		
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		String[] attributeNames = param.getAttributeName();
@@ -99,7 +99,7 @@ public class ClazzServiceImpl implements IClazzService {
 			attribute.setClazzId(clazz.getId());
 			attribute.setStatus("1");
 			attribute.setCreateTime(new Date());
-			attributeDao.save(attribute);
+			//attributeDao.save(attribute);
 			//attributes.add(attribute);
 		}
 		VelocityTemplate vt = new VelocityTemplate(param, "UTF-8");
