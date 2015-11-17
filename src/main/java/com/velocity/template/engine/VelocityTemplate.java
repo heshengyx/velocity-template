@@ -108,6 +108,7 @@ public class VelocityTemplate {
 		}
 	}
 	
+	
 	private void createTemplateConf() {
 		String name1 = className.get("name1");
 		String name2 = className.get("name2");

@@ -84,7 +84,7 @@ public class ClazzServiceImpl implements IClazzService {
 		clazz.setClazzName(param.getClazzName());
 		clazz.setTableName(param.getTableName());
 		clazz.setTitle(param.getTitle());
-		//save(clazz);
+		save(clazz);
 		
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		String[] attributeNames = param.getAttributeName();

@@ -151,4 +151,5 @@ function getBoxValues(className) {
 	});
 	return values;
 }
+
 </script>
