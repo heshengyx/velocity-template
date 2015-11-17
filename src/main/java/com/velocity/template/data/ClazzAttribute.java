@@ -14,6 +14,7 @@ public class ClazzAttribute implements Serializable {
 	private String[] attributeName;
 	private String[] attributeTitle;
 	private String[] attributeType;
+	private String[] attributeSearch;
 	
 	public String getClazzName() {
 		return clazzName;
@@ -32,6 +33,12 @@ public class ClazzAttribute implements Serializable {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String[] getAttributeSearch() {
+		return attributeSearch;
+	}
+	public void setAttributeSearch(String[] attributeSearch) {
+		this.attributeSearch = attributeSearch;
 	}
 	public String[] getAttributeName() {
 		return attributeName;

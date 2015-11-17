@@ -36,14 +36,15 @@
 <table id="gridTable">
   <tr role="row" class="ui-widget-content jqgrow ui-row-ltr">
     <td role="gridcell"><input role="checkbox" name="attributeBox" class="cbox" type="checkbox"></td>
-    <td role="gridcell"><input type="text" name="attributeNameAdd" class="attributeNameAdd" placeholder="属性名称" /></td>
-    <td role="gridcell"><input type="text" name="attributeTitleAdd" class="attributeTitleAdd" placeholder="属性标题" /></td>
+    <td role="gridcell"><input type="text" name="attributeNameAdd" class="attributeNameAdd" style="width:80px;" placeholder="属性名称" /></td>
+    <td role="gridcell"><input type="text" name="attributeTitleAdd" class="attributeTitleAdd" style="width:80px;" placeholder="属性标题" /></td>
     <td role="gridcell">
     <select name="attributeTypeAdd" class="attributeTypeAdd">
     	<option value="String">String</option>
     	<option value="Date">Date</option>
     	<option value="int">int</option>
     </select></td>
+    <td role="gridcell"><input role="checkbox" name="attributeSearch" class="cbox" type="checkbox"></td>
   </tr>
 </table>
 <script type="text/javascript">	
@@ -52,10 +53,10 @@ $(document).ready(function() {
 	$("#attributeGridTable").jqGrid({
 		datatype: "json",
 		colModel: [
-			{label:'属性名称', name:'attributeName', index:'attributeName', sortable:false},
-			{label:'属性标题', name:'attributeTitle', index:'attributeTitle', sortable:false},
-			{label:'属性类型', name:'attributeType', index:'attributeType', sortable:false},
-			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false}
+			{label:'属性名称', name:'attributeName', index:'attributeName', sortable:false, width:150},
+			{label:'属性标题', name:'attributeTitle', index:'attributeTitle', sortable:false, width:120},
+			{label:'属性类型', name:'attributeType', index:'attributeType', sortable:false, width:100},
+			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false, width:80}
 		],
 	   	viewrecords: true,
 	   	multiselect: true,
@@ -67,12 +68,19 @@ $(document).ready(function() {
 				updatePagerIcons(table);
 				enableTooltips(table);
 			}, 0); */
-		},
-		autowidth: true
+		}
+		//autowidth: true
+		/* gridComplete : function() {
+	   		var html = $("#gridTable tbody").html();
+	   		if ("" != html) {
+	   			$("#attributeGridTable tbody").append(html);
+	   			$("#gridTable tbody").html("");
+	   		}
+	    } */
 	});
 	$("#btn-add-attribute").click(function() {
 		var html = $("#gridTable tbody").html();
-		$("#attributeGridTable").append(html);
+		$("#attributeGridTable tbody").append(html);
 	});
 	$("#btn-save").click(function() {
 		var attributeNames = getValues("#attributeGridTable .attributeNameAdd");

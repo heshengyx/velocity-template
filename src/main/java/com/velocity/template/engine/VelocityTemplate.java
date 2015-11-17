@@ -33,6 +33,7 @@ public class VelocityTemplate {
 	private String[] attributeNames;
 	private String[] attributeTitles;
 	private String[] attributeTypes;
+	private String[] attributeSearchs;
 	private Map<String, String> className;
 
 	public VelocityTemplate() {
@@ -66,6 +67,7 @@ public class VelocityTemplate {
 		this.attributeNames = clazzAttribute.getAttributeName();
 		this.attributeTitles = clazzAttribute.getAttributeTitle();
 		this.attributeTypes = clazzAttribute.getAttributeType();
+		this.attributeSearchs = clazzAttribute.getAttributeSearch();
 		this.className = getClassName();
 		this.encoding = encoding;
 	}
@@ -91,9 +93,9 @@ public class VelocityTemplate {
 
 	public void createTemplate() {
 		try {
-			createTemplateEntity();
-			/*createTemplateParam();
-			createTemplateMapper();
+			//createTemplateEntity();
+			createTemplateParam();
+			/*createTemplateMapper();
 			createTemplateMapperXml("ATTRIBUTE");
 			createTemplateDao();
 			createTemplateService();
@@ -195,7 +197,30 @@ public class VelocityTemplate {
 
 		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
+		
+		StringBuilder attributes = new StringBuilder("");
+		StringBuilder methods = new StringBuilder("");
+		for (int i = 0; i < attributeNames.length; i++) {
+			if ("1".equals(attributeSearchs[i])) {
+				attributes.append("private ").append(attributeTypes[i])
+						.append(" ").append(attributeNames[i]).append(";\n");
 
+				methods.append("public void ")
+						.append(StringUtil.setMethodName(attributeNames[i]))
+						.append("(").append(attributeTypes[i]).append(" ")
+						.append(attributeNames[i]).append(") {\n");
+				methods.append("	this.").append(attributeNames[i])
+						.append(" = ").append(attributeNames[i])
+						.append(";\n}\n");
+				methods.append("public ").append(attributeTypes[i]).append(" ")
+						.append(StringUtil.getMethodName(attributeNames[i]))
+						.append("() {\n");
+				methods.append("	return ").append(attributeNames[i])
+						.append(";\n").append("}\n");
+			}
+		}
+		context.put("attributes", attributes.toString());
+		context.put("methods", methods.toString());
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(props.getProperty("path_param") + className.get("name1")
