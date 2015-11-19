@@ -11,11 +11,18 @@ public class Attribute implements Serializable {
 	private String attributeTitle;
 	private String attributeType;
 	private String attributeSearch;
+	private String attributeColumn;
 	private String status;
 	private Date createTime;
 	private Date updateTime;
 	private String remarks;
 	
+	public String getAttributeColumn() {
+		return attributeColumn;
+	}
+	public void setAttributeColumn(String attributeColumn) {
+		this.attributeColumn = attributeColumn;
+	}
 	public String getAttributeSearch() {
 		return attributeSearch;
 	}

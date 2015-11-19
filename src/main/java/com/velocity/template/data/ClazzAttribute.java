@@ -15,7 +15,21 @@ public class ClazzAttribute implements Serializable {
 	private String[] attributeTitle;
 	private String[] attributeType;
 	private String[] attributeSearch;
+	private String[] attributeColumn;
+	private String[] attributeEdit;
 	
+	public String[] getAttributeEdit() {
+		return attributeEdit;
+	}
+	public void setAttributeEdit(String[] attributeEdit) {
+		this.attributeEdit = attributeEdit;
+	}
+	public String[] getAttributeColumn() {
+		return attributeColumn;
+	}
+	public void setAttributeColumn(String[] attributeColumn) {
+		this.attributeColumn = attributeColumn;
+	}
 	public String getClazzName() {
 		return clazzName;
 	}

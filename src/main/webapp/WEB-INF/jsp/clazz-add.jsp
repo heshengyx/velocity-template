@@ -35,15 +35,17 @@
 </form>
 <table id="gridTable">
   <tr role="row" class="ui-widget-content jqgrow ui-row-ltr">
-    <td role="gridcell"><input type="text" name="attributeNameAdd" class="attributeNameAdd" style="width:80px;" placeholder="属性名称" /></td>
-    <td role="gridcell"><input type="text" name="attributeTitleAdd" class="attributeTitleAdd" style="width:80px;" placeholder="属性标题" /></td>
+    <td role="gridcell"><input type="text" name="attributeName" class="attributeName" style="width:80px;" placeholder="属性名称" /></td>
+    <td role="gridcell"><input type="text" name="attributeColumn" class="attributeColumn" style="width:80px;" placeholder="属性字段" /></td>
+    <td role="gridcell"><input type="text" name="attributeTitle" class="attributeTitle" style="width:80px;" placeholder="属性标题" /></td>
     <td role="gridcell">
-    <select name="attributeTypeAdd" class="attributeTypeAdd">
+    <select name="attributeType" class="attributeType">
     	<option value="String">String</option>
     	<option value="Date">Date</option>
     	<option value="int">int</option>
     </select></td>
-    <td role="gridcell"><input role="checkbox" name="attributeSearchAdd" class="attributeSearchAdd" type="checkbox" value="1"></td>
+    <td role="gridcell"><input role="checkbox" name="attributeSearch" class="attributeSearch" type="checkbox" value="1"></td>
+    <td role="gridcell"><input role="checkbox" name="attributeEdit" class="attributeEdit" type="checkbox" value="1"></td>
   </tr>
 </table>
 <script type="text/javascript">	
@@ -53,9 +55,11 @@ $(document).ready(function() {
 		datatype: "json",
 		colModel: [
 			{label:'属性名称', name:'attributeName', index:'attributeName', sortable:false, width:150},
+			{label:'属性字段', name:'attributeColumn', index:'attributeColumn', sortable:false, width:120},
 			{label:'属性标题', name:'attributeTitle', index:'attributeTitle', sortable:false, width:120},
 			{label:'属性类型', name:'attributeType', index:'attributeType', sortable:false, width:100},
-			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false, width:80}
+			{label:'是否查询', name:'attributeSearch', index:'attributeSearch', sortable:false, width:80},
+			{label:'是否编辑', name:'attributeEdit', index:'attributeEdit', sortable:false, width:80}
 		],
 	   	viewrecords: true,
 	   	//multiselect: true,
@@ -82,10 +86,12 @@ $(document).ready(function() {
 		$("#attributeGridTable tbody").append(html);
 	});
 	$("#btn-save").click(function() {
-		var attributeNames = getValues("#attributeGridTable .attributeNameAdd");
-		var attributeTitles = getValues("#attributeGridTable .attributeTitleAdd");
-		var attributeTypes = getValues("#attributeGridTable .attributeTypeAdd");
-		var attributeSearchs = getBoxValues("#attributeGridTable .attributeSearchAdd");
+		var attributeNames = getValues("#attributeGridTable .attributeName");
+		var attributeColumns = getValues("#attributeGridTable .attributeColumn");
+		var attributeTitles = getValues("#attributeGridTable .attributeTitle");
+		var attributeTypes = getValues("#attributeGridTable .attributeType");
+		var attributeSearchs = getBoxValues("#attributeGridTable .attributeSearch");
+		var attributeEdits = getBoxValues("#attributeGridTable .attributeEdit");
 		if (attributeNames.length > 0) {
 			var url = "${ctx}/manage/clazz/save?random="+ Math.random();
 			var params = {
@@ -93,9 +99,11 @@ $(document).ready(function() {
 				clazzName: $("#clazzNameAdd").val(),
 				tableName: $("#tableNameAdd").val(),
 				attributeName: attributeNames,
+				attributeColumn: attributeColumns,
 				attributeTitle: attributeTitles,
 				attributeType: attributeTypes,
-				attributeSearch: attributeSearchs
+				attributeSearch: attributeSearchs,
+				attributeEdit: attributeEdits
 			};
 			$.ajax({  
 	            type: 'post',  

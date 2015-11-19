@@ -34,6 +34,8 @@ public class VelocityTemplate {
 	private String[] attributeTitles;
 	private String[] attributeTypes;
 	private String[] attributeSearchs;
+	private String[] attributeColumns;
+	private String[] attributeEdits;
 	private Map<String, String> className;
 
 	public VelocityTemplate() {
@@ -68,6 +70,8 @@ public class VelocityTemplate {
 		this.attributeTitles = clazzAttribute.getAttributeTitle();
 		this.attributeTypes = clazzAttribute.getAttributeType();
 		this.attributeSearchs = clazzAttribute.getAttributeSearch();
+		this.attributeColumns = clazzAttribute.getAttributeColumn();
+		this.attributeEdits = clazzAttribute.getAttributeEdit();
 		this.className = getClassName();
 		this.encoding = encoding;
 	}
@@ -94,14 +98,14 @@ public class VelocityTemplate {
 	public void createTemplate() {
 		try {
 			createTemplateEntity();
-			createTemplateParam();
-			/*createTemplateMapper();
-			createTemplateMapperXml("ATTRIBUTE");
-			createTemplateDao();
-			createTemplateService();
-			createTemplateController();
-			createTemplateJSP("类属性");
-			createTemplateConf();*/
+			//createTemplateParam();
+			//createTemplateMapper();
+			//createTemplateMapperXml();
+			//createTemplateDao();
+			//createTemplateService();
+			//createTemplateController();
+			createTemplateJSP();
+			//createTemplateConf();*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException("模板创建失败");
@@ -229,23 +233,97 @@ public class VelocityTemplate {
 	}
 
 
-	private void createTemplateJSP(String title) throws Exception {
+	private void createTemplateJSP() throws Exception {
 		template = ve.getTemplate("template.jsp.list.vm", encoding);
 		VelocityContext context = new VelocityContext();
 		
 		context.put("entity", className.get("name2"));
-		context.put("title", title);
-
+		context.put("title", this.title);
+		StringBuilder querys = new StringBuilder("");//colModels
+		StringBuilder querysParam = new StringBuilder("");
+		StringBuilder colModels = new StringBuilder("");
+		
+		for (int i = 0; i < attributeNames.length; i++) {
+			if ("1".equals(attributeSearchs[i])) {
+				querys.append("<div class=\"form-group\">\n");
+				querys.append(
+						"	<label class=\"col-sm-1 control-label no-padding-right\" for=\"")
+						.append(attributeNames[i]).append("Query\">")
+						.append(attributeTitles[i]).append("</label>\n");
+				querys.append("	<div class=\"col-sm-11\">\n");
+				querys.append("<input type=\"text\" id=\"")
+						.append(attributeNames[i])
+						.append("Query\" placeholder=\"")
+						.append(attributeTitles[i])
+						.append("\" class=\"col-xs-10 col-sm-5\" />\n");
+				querys.append("</div>\n").append("</div>\n");
+				
+				querysParam.append(attributeNames[i]).append(": $(\"#")
+						.append(attributeNames[i]).append("Query\").val(),\n");
+			}
+			colModels.append("{label:'").append(attributeTitles[i])
+					.append("', name:'").append(attributeNames[i])
+					.append("', index:'").append(attributeNames[i])
+					.append("'},\n");
+		}
+		context.put("querys", querys.toString());
+		context.put("querysParam", querysParam.toString());
+		context.put("colModels", colModels.toString());
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-list.jsp", writer.toString());
 		
 		template = ve.getTemplate("template.jsp.add.vm", encoding);
+		StringBuilder adds = new StringBuilder("");
+		StringBuilder addsParam = new StringBuilder("");
+		StringBuilder edits = new StringBuilder("");
+		StringBuilder editsParam = new StringBuilder("");
+		
+		for (int i = 0; i < attributeNames.length; i++) {
+			if ("1".equals(attributeEdits[i])) {
+				adds.append("<div class=\"form-group\">\n");
+				adds.append(
+						"	<label class=\"col-sm-2 control-label no-padding-right\" for=\"")
+						.append(attributeNames[i]).append("Add\">")
+						.append(attributeTitles[i]).append("</label>\n");
+				adds.append("	<div class=\"col-sm-10\">\n");
+				adds.append("<input type=\"text\" id=\"")
+						.append(attributeNames[i])
+						.append("Add\" placeholder=\"")
+						.append(attributeTitles[i])
+						.append("\" class=\"col-xs-10 col-sm-10\" />\n");
+				adds.append("</div>\n").append("</div>\n");
+				
+				addsParam.append(attributeNames[i]).append(": $(\"#")
+						.append(attributeNames[i]).append("Add\").val(),\n");
+
+				edits.append("<div class=\"form-group\">\n");
+				edits.append(
+						"	<label class=\"col-sm-2 control-label no-padding-right\" for=\"")
+						.append(attributeNames[i]).append("Edit\">")
+						.append(attributeTitles[i]).append("</label>\n");
+				edits.append("	<div class=\"col-sm-10\">\n");
+				edits.append("<input type=\"text\" id=\"")
+						.append(attributeNames[i])
+						.append("Edit\" placeholder=\"")
+						.append(attributeTitles[i])
+						.append("\" class=\"col-xs-10 col-sm-10\" />\n");
+				edits.append("</div>\n").append("</div>\n");
+				
+				editsParam.append(attributeNames[i]).append(": $(\"#")
+						.append(attributeNames[i]).append("Edit\").val(),\n");
+			}
+		}
+		
+		context.put("adds", adds.toString());
+		context.put("addsParam", addsParam.toString());
 		writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-add.jsp", writer.toString());
 		
 		template = ve.getTemplate("template.jsp.edit.vm", encoding);
+		context.put("edits", edits.toString());
+		context.put("editsParam", editsParam.toString());
 		writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-edit.jsp", writer.toString());
@@ -265,15 +343,47 @@ public class VelocityTemplate {
 				+ "Mapper.java", writer.toString());
 	}
 
-	private void createTemplateMapperXml(String table) throws Exception {
+	private void createTemplateMapperXml() throws Exception {
 		template = ve.getTemplate("template.mapper.xml.vm", encoding);
 		VelocityContext context = new VelocityContext();
 
 		context.put("package", className.get("packageName"));
 		context.put("Entity", className.get("name1"));
 		context.put("entity", className.get("name2"));
-		context.put("table", table);
-
+		context.put("table", this.tableName); //${conditions}
+		
+		StringBuilder conditions = new StringBuilder("");
+		StringBuilder results = new StringBuilder("");
+		StringBuilder columns = new StringBuilder("");
+		StringBuilder values = new StringBuilder("");
+		
+		for (int i = 0; i < attributeNames.length; i++) {
+			if ("1".equals(attributeSearchs[i])) {
+				conditions.append("<if test=\"param.")
+						.append(attributeNames[i])
+						.append(" != null and param.")
+						.append(attributeNames[i]).append(" != ''\">\n");
+				conditions.append(" AND a.").append(attributeColumns[i])
+						.append(" = #{param.").append(attributeNames[i])
+						.append("}\n");
+				conditions.append("</if>\n");
+			}
+			results.append("<result column=\"").append(attributeColumns[i])
+					.append("\" property=\"").append(attributeNames[i])
+					.append("\" jdbcType=\"VARCHAR\" />\n");
+			
+			columns.append(attributeColumns[i]);
+			values.append("#{param.").append(attributeNames[i])
+					.append(", jdbcType=VARCHAR}");
+			if (i != attributeNames.length) {
+				columns.append(", ");
+				values.append(",\n");
+			}
+		}
+		context.put("conditions", conditions.toString());
+		context.put("results", results.toString());
+		context.put("columns", columns.toString());
+		context.put("values", values.toString());
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(

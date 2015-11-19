@@ -3,6 +3,7 @@
 <mapper namespace="${package}.mapper.I${Entity}Mapper">
 	<resultMap type="${package}.entity.${Entity}" id="${entity}Result">
 		<id column="ID" property="id" jdbcType="VARCHAR" />
+		${results}
 <result column="STATUS" property="status" jdbcType="VARCHAR" />
 <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
 <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
@@ -11,6 +12,7 @@
 
 	<sql id="sqlQuery">
 		FROM ${table} a where 1=1
+		${conditions}
 	</sql>
 	
 	<select id="getDataById" resultMap="${entity}Result">
@@ -25,9 +27,10 @@
 	</select>
 	
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO ${table} (ID, STATUS, CREATE_TIME, REMARKS)
+		INSERT INTO ${table} (ID, ${columns} STATUS, CREATE_TIME, REMARKS)
 		VALUES (
 #{param.id, jdbcType=VARCHAR},
+${values}
 #{param.status, jdbcType=VARCHAR},
 #{param.createTime, jdbcType=TIMESTAMP},
 #{param.remarks, jdbcType=VARCHAR})
