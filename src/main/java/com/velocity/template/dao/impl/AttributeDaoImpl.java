@@ -48,4 +48,10 @@ public class AttributeDaoImpl extends BaseDao<IAttributeMapper> implements IAttr
 		IAttributeMapper mapper = getMapper(IAttributeMapper.class);
 		return mapper.query(param, start, end);
 	}
+
+	@Override
+	public int saveBatch(List<Attribute> param) {
+		IAttributeMapper mapper = getMapper(IAttributeMapper.class);
+		return mapper.saveBatch(param);
+	}
 }

@@ -84,24 +84,30 @@ public class ClazzServiceImpl implements IClazzService {
 		clazz.setClazzName(param.getClazzName());
 		clazz.setTableName(param.getTableName());
 		clazz.setTitle(param.getTitle());
-		//save(clazz);
+		save(clazz);
 		
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		String[] attributeNames = param.getAttributeName();
 		String[] attributeTitles = param.getAttributeTitle();
 		String[] attributeTypes = param.getAttributeType();
+		String[] attributeSearchs = param.getAttributeSearch();
+		String[] attributeColumns = param.getAttributeColumn();
+		String[] attributeEdits = param.getAttributeEdit();
 		for (int i = 0; i < attributeNames.length; i++) {
 			Attribute attribute = new Attribute();
+			attribute.setId(UIDGeneratorUtil.getUID());
 			attribute.setAttributeName(attributeNames[i]);
 			attribute.setAttributeTitle(attributeTitles[i]);
 			attribute.setAttributeType(attributeTypes[i]);
-			attribute.setId(UIDGeneratorUtil.getUID());
+			attribute.setAttributeSearch(attributeSearchs[i]);
+			attribute.setAttributeColumn(attributeColumns[i]);
+			attribute.setAttributeEdit(attributeEdits[i]);
 			attribute.setClazzId(clazz.getId());
 			attribute.setStatus("1");
 			attribute.setCreateTime(new Date());
-			//attributeDao.save(attribute);
-			//attributes.add(attribute);
+			attributes.add(attribute);
 		}
+		attributeDao.saveBatch(attributes);
 		VelocityTemplate vt = new VelocityTemplate(param, "UTF-8");
 		vt.createTemplate();
 	}

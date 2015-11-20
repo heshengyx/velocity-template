@@ -27,14 +27,9 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<form class="form-horizontal" role="form">
+							<!-- querys -->
 							${querys}
-							<!--
-							<div class="form-group">
-								<label class="col-sm-1 control-label no-padding-right" for="buildingNameQuery">名称</label>
-								<div class="col-sm-11">
-									<input type="text" id="buildingNameQuery" placeholder="名称" class="col-xs-10 col-sm-5" />
-								</div>
-							</div>-->
+							<!-- querys -->
 							
 							<div class="form-group">
 								<div class="col-md-offset-1 col-md-11">
@@ -62,6 +57,7 @@
 		<script src="${ctx}/js/format-util.js"></script>
 		<script src="${ctx}/js/dialog-min.js"></script>
 		<script src="${ctx}/js/dialog-util.js"></script>
+		<script src="${ctx}/js/jquery.validate.min.js"></script>
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({

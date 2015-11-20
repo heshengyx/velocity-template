@@ -17,4 +17,5 @@ public interface IAttributeMapper {
 	int count(@Param("param") AttributeQueryParam param);
 	List<Attribute> query(@Param("param") AttributeQueryParam param,
 			@Param("start") int start, @Param("end") int end);
+	int saveBatch(@Param("param") List<Attribute> param);
 }

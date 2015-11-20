@@ -39,7 +39,8 @@ ${values}
 	<update id="update">
 		update ${table}
 		<set>
-UPDATE_TIME = #{param.updateTime, jdbcType=TIMESTAMP},
+			${sets}
+			UPDATE_TIME = #{param.updateTime, jdbcType=TIMESTAMP}
 		</set>
 		where id = #{param.id, jdbcType=VARCHAR}
 	</update>

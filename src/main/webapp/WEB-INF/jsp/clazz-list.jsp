@@ -61,6 +61,7 @@
 		<script src="${ctx}/js/format-util.js"></script>
 		<script src="${ctx}/js/dialog-min.js"></script>
 		<script src="${ctx}/js/dialog-util.js"></script>
+		<script src="${ctx}/js/jquery.validate.min.js"></script>
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({

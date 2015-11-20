@@ -14,4 +14,5 @@ public interface IAttributeDao {
 	
 	int count(AttributeQueryParam param);
 	List<Attribute> query(AttributeQueryParam param, int start, int end);
+	int saveBatch(List<Attribute> param);
 }

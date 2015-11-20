@@ -98,22 +98,23 @@ public class VelocityTemplate {
 	public void createTemplate() {
 		try {
 			createTemplateEntity();
-			//createTemplateParam();
-			//createTemplateMapper();
-			//createTemplateMapperXml();
-			//createTemplateDao();
-			//createTemplateService();
-			//createTemplateController();
+			createTemplateParam();
+			createTemplateMapper();
+			createTemplateMapperXml();
+			createTemplateDao();
+			createTemplateService();
+			createTemplateController();
 			createTemplateJSP();
-			//createTemplateConf();*/
+			//createTemplateHessian();
+			//createTemplateApplication();
+			createTemplateSitemesh();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException("模板创建失败");
 		}
 	}
 	
-	
-	private void createTemplateConf() {
+	private void createTemplateHessian() {
 		String name1 = className.get("name1");
 		String name2 = className.get("name2");
 		
@@ -130,10 +131,16 @@ public class VelocityTemplate {
 			content = content.replace("<!-- hessian-servlet-conf -->", sb.toString());
 			writeJavaFile(path + "hessian-servlet.xml", content);
 		}
+	}
+	
+	private void createTemplateApplication() {
+		String name1 = className.get("name1");
+		String name2 = className.get("name2");
 		
-		path = props.getProperty("path_application_web");
-		file = new File(path + "application-web.xml");
-		content = readToString(file);
+		StringBuffer sb = new StringBuffer("");
+		String path = props.getProperty("path_application_web");
+		File file = new File(path + "application-web.xml");
+		String content = readToString(file);
 		if (!content.contains(name2 + "Service")) {
 			sb = new StringBuffer("");
 			sb.append("<bean id=\"" + name2 + "Service\" class=\"org.springframework.remoting.caucho.HessianProxyFactoryBean\">\n");
@@ -148,10 +155,15 @@ public class VelocityTemplate {
 			content = content.replace("<!-- application-web-conf -->", sb.toString());
 			writeJavaFile(path + "application-web.xml", content);
 		}
+	}
+	
+	private void createTemplateSitemesh() {
+		String name2 = className.get("name2");
 		
-		path = props.getProperty("path_sitemesh");
-		file = new File(path + "sitemesh3.xml");
-		content = readToString(file);
+		StringBuffer sb = new StringBuffer("");
+		String path = props.getProperty("path_sitemesh");
+		File file = new File(path + "sitemesh3.xml");
+		String content = readToString(file);
 		if (!content.contains("manage/" + name2)) {
 			sb = new StringBuffer("");
 			sb.append("<mapping path=\"/manage/" + name2 + "\" decorator=\"/WEB-INF/layout/mainLayout.jsp\"/>\n");
@@ -278,6 +290,7 @@ public class VelocityTemplate {
 		StringBuilder addsParam = new StringBuilder("");
 		StringBuilder edits = new StringBuilder("");
 		StringBuilder editsParam = new StringBuilder("");
+		StringBuilder editsData = new StringBuilder("");
 		
 		for (int i = 0; i < attributeNames.length; i++) {
 			if ("1".equals(attributeEdits[i])) {
@@ -312,11 +325,16 @@ public class VelocityTemplate {
 				
 				editsParam.append(attributeNames[i]).append(": $(\"#")
 						.append(attributeNames[i]).append("Edit\").val(),\n");
+				
+				editsData.append("$(\"#").append(attributeNames[i])
+						.append("Edit\").val(result.data.")
+						.append(attributeNames[i]).append(");\n");
 			}
 		}
 		
 		context.put("adds", adds.toString());
 		context.put("addsParam", addsParam.toString());
+		context.put("editsData", editsData.toString());
 		writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(props.getProperty("path_jsp") + className.get("name2") + "-add.jsp", writer.toString());
@@ -356,6 +374,7 @@ public class VelocityTemplate {
 		StringBuilder results = new StringBuilder("");
 		StringBuilder columns = new StringBuilder("");
 		StringBuilder values = new StringBuilder("");
+		StringBuilder sets = new StringBuilder("");
 		
 		for (int i = 0; i < attributeNames.length; i++) {
 			if ("1".equals(attributeSearchs[i])) {
@@ -379,11 +398,18 @@ public class VelocityTemplate {
 				columns.append(", ");
 				values.append(",\n");
 			}
+			
+			if ("1".equals(attributeEdits[i])) {
+				sets.append(attributeColumns[i]).append(" = #{param.")
+						.append(attributeNames[i]).append(", jdbcType=VARCHAR},\n");
+			}
 		}
+		
 		context.put("conditions", conditions.toString());
 		context.put("results", results.toString());
 		context.put("columns", columns.toString());
 		context.put("values", values.toString());
+		context.put("sets", sets.toString());
 		StringWriter writer = new StringWriter();
 		template.merge(context, writer);
 		writeJavaFile(

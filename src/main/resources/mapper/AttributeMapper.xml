@@ -3,6 +3,12 @@
 <mapper namespace="com.velocity.template.mapper.IAttributeMapper">
 	<resultMap type="com.velocity.template.entity.Attribute" id="attributeResult">
 		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_NAME" property="attributeName" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_TITLE" property="attributeTitle" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_TYPE" property="attributeType" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_SEARCH" property="attributeSearch" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_COLUMN" property="attributeColumn" jdbcType="VARCHAR" />
+		<result column="ATTRIBUTE_EDIT" property="attributeEdit" jdbcType="VARCHAR" />
 <result column="STATUS" property="status" jdbcType="VARCHAR" />
 <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
 <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
@@ -25,16 +31,56 @@
 	</select>
 	
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO ATTRIBUTE (ID, CLAZZ_ID, ATTRIBUTE_NAME, ATTRIBUTE_TITLE, ATTRIBUTE_TYPE, STATUS, CREATE_TIME, REMARKS)
+		INSERT INTO ATTRIBUTE (
+			ID, 
+			CLAZZ_ID, 
+			ATTRIBUTE_NAME, 
+			ATTRIBUTE_TITLE, 
+			ATTRIBUTE_TYPE, 
+			ATTRIBUTE_SEARCH, 
+			ATTRIBUTE_COLUMN, 
+			ATTRIBUTE_EDIT,
+			STATUS, CREATE_TIME, REMARKS)
 		VALUES (
 #{param.id, jdbcType=VARCHAR},
 #{param.clazzId, jdbcType=VARCHAR},
 #{param.attributeName, jdbcType=VARCHAR},
 #{param.attributeTitle, jdbcType=VARCHAR},
 #{param.attributeType, jdbcType=VARCHAR},
+#{param.attributeSearch, jdbcType=VARCHAR},
+#{param.attributeColumn, jdbcType=VARCHAR},
+#{param.attributeEdit, jdbcType=VARCHAR},
 #{param.status, jdbcType=VARCHAR},
 #{param.createTime, jdbcType=TIMESTAMP},
 #{param.remarks, jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveBatch">
+		INSERT INTO ATTRIBUTE (
+			ID, 
+			CLAZZ_ID, 
+			ATTRIBUTE_NAME, 
+			ATTRIBUTE_TITLE, 
+			ATTRIBUTE_TYPE, 
+			ATTRIBUTE_SEARCH, 
+			ATTRIBUTE_COLUMN, 
+			ATTRIBUTE_EDIT,
+			STATUS, CREATE_TIME, REMARKS)
+		VALUES 
+		<foreach collection="param" item="item" index="index" separator=",">
+(
+#{item.id, jdbcType=VARCHAR},
+#{item.clazzId, jdbcType=VARCHAR},
+#{item.attributeName, jdbcType=VARCHAR},
+#{item.attributeTitle, jdbcType=VARCHAR},
+#{item.attributeType, jdbcType=VARCHAR},
+#{item.attributeSearch, jdbcType=VARCHAR},
+#{item.attributeColumn, jdbcType=VARCHAR},
+#{item.attributeEdit, jdbcType=VARCHAR},
+#{item.status, jdbcType=VARCHAR},
+#{item.createTime, jdbcType=TIMESTAMP},
+#{item.remarks, jdbcType=VARCHAR})
+		</foreach>
 	</insert>
 	
 	<update id="update">

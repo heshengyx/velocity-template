@@ -1,34 +1,34 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="/common/include.jsp"%>
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" id="validation-formAdd" role="form">
 	<div class="form-group">
-		<label class="col-sm-2 control-label no-padding-right" for="clazzNameAdd">类名</label>
-		<div class="col-sm-10">
-			<input type="text" id="clazzNameAdd" placeholder="类名" class="col-xs-10 col-sm-10" />
+		<label class="col-sm-1 control-label no-padding-right" for="clazzNameAdd">类名</label>
+		<div class="col-sm-11">
+			<input type="text" name="clazzName" id="clazzNameAdd" placeholder="类名" class="col-xs-10 col-sm-10" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-2 control-label no-padding-right" for="tableNameAdd">表名</label>
-		<div class="col-sm-10">
+		<label class="col-sm-1 control-label no-padding-right" for="tableNameAdd">表名</label>
+		<div class="col-sm-11">
 			<input type="text" id="tableNameAdd" placeholder="表名" class="col-xs-10 col-sm-10" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-2 control-label no-padding-right" for="titleAdd">标题</label>
-		<div class="col-sm-10">
+		<label class="col-sm-1 control-label no-padding-right" for="titleAdd">标题</label>
+		<div class="col-sm-11">
 			<input type="text" id="titleAdd" placeholder="标题" class="col-xs-10 col-sm-10" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-2 control-label no-padding-right">属性</label>
-		<div class="col-sm-10">
+		<label class="col-sm-1 control-label no-padding-right">属性</label>
+		<div class="col-sm-11">
 			<button class="btn btn-sm btn-info" type="button" id="btn-add-attribute"><i class="icon-plus bigger-110"></i></button>
 			<table id="attributeGridTable"></table>
 		</div>
 	</div>
 	
 	<div class="form-group">
-		<div class="col-md-offset-2 col-md-10">
+		<div class="col-md-offset-1 col-md-11">
 			<button class="btn btn-sm btn-info" type="button" id="btn-save"><i class="icon-save bigger-110"></i>保 存</button>
 		</div>
 	</div>
@@ -81,64 +81,82 @@ $(document).ready(function() {
 	   		}
 	    } */
 	});
+	$('#validation-formAdd').validate({
+		rules: {
+			clazzName: 'required'
+		},
+		messages: {
+			clazzName: '不能为空'
+		},
+		submitHandler: function(form) {
+			var attributeNames = getValues("#attributeGridTable .attributeName");
+			var attributeColumns = getValues("#attributeGridTable .attributeColumn");
+			var attributeTitles = getValues("#attributeGridTable .attributeTitle");
+			var attributeTypes = getValues("#attributeGridTable .attributeType");
+			var attributeSearchs = getBoxValues("#attributeGridTable .attributeSearch");
+			var attributeEdits = getBoxValues("#attributeGridTable .attributeEdit");
+			if (attributeNames.length > 0) {
+				var d = dialog({
+				    title: '消息',
+				    width: 200,
+				    content: '正在保存',
+			    	cancel: false
+				}).showModal();
+				var url = "${ctx}/manage/clazz/save?random="+ Math.random();
+				var params = {
+					title: $("#titleAdd").val(),
+					clazzName: $("#clazzNameAdd").val(),
+					tableName: $("#tableNameAdd").val(),
+					attributeName: attributeNames,
+					attributeColumn: attributeColumns,
+					attributeTitle: attributeTitles,
+					attributeType: attributeTypes,
+					attributeSearch: attributeSearchs,
+					attributeEdit: attributeEdits
+				};
+				$.ajax({  
+		            type: 'post',  
+		            dataType: "json",
+		            url: url,  
+		            data: params,  
+		            traditional: true, 
+		            success: function(result){
+		            	d.close().remove();
+		            	dialog({
+		    			    title: '消息',
+		    			    width: 200,
+		    			    content: result.message,
+		    			    okValue: '确定',
+		    			    ok: function () {
+		    			    	if (result.code == "500") {
+		    			    		return true;	
+		    			    	} else {
+		    			    		_myDialog.close().remove();
+		    		                doSearch();	
+		    			    	}
+		    		    	},
+		    			    cancel: false
+		    			}).showModal();
+		            }  
+		        });
+			} else {
+				dialog({
+				    title: '消息',
+				    width: 200,
+				    content: '请至少添加一个属性',
+				  	okValue: '确定',
+			    	ok: true,
+			    	cancel: false
+				}).showModal();
+			}
+		}
+	});
 	$("#btn-add-attribute").click(function() {
 		var html = $("#gridTable tbody").html();
 		$("#attributeGridTable tbody").append(html);
 	});
 	$("#btn-save").click(function() {
-		var attributeNames = getValues("#attributeGridTable .attributeName");
-		var attributeColumns = getValues("#attributeGridTable .attributeColumn");
-		var attributeTitles = getValues("#attributeGridTable .attributeTitle");
-		var attributeTypes = getValues("#attributeGridTable .attributeType");
-		var attributeSearchs = getBoxValues("#attributeGridTable .attributeSearch");
-		var attributeEdits = getBoxValues("#attributeGridTable .attributeEdit");
-		if (attributeNames.length > 0) {
-			var url = "${ctx}/manage/clazz/save?random="+ Math.random();
-			var params = {
-				title: $("#titleAdd").val(),
-				clazzName: $("#clazzNameAdd").val(),
-				tableName: $("#tableNameAdd").val(),
-				attributeName: attributeNames,
-				attributeColumn: attributeColumns,
-				attributeTitle: attributeTitles,
-				attributeType: attributeTypes,
-				attributeSearch: attributeSearchs,
-				attributeEdit: attributeEdits
-			};
-			$.ajax({  
-	            type: 'post',  
-	            dataType: "json",
-	            url: url,  
-	            data: params,  
-	            traditional: true, 
-	            success: function(result){  
-	            	dialog({
-	    			    title: '消息',
-	    			    width: 200,
-	    			    content: result.message,
-	    			    okValue: '确定',
-	    			    ok: function () {
-	    			    	if (result.code == "500") {
-	    			    		return true;	
-	    			    	} else {
-	    			    		_myDialog.close().remove();
-	    		                doSearch();	
-	    			    	}
-	    		    	},
-	    			    cancel: false
-	    			}).showModal();
-	            }  
-	        });
-		} else {
-			dialog({
-			    title: '消息',
-			    width: 200,
-			    content: '请至少添加一个属性',
-			  	okValue: '确定',
-		    	ok: true,
-		    	cancel: false
-			}).showModal();
-		}
+		$("#validation-formAdd").submit();
 	});
 });
 function getValues(className) {
@@ -159,5 +177,4 @@ function getBoxValues(className) {
 	});
 	return values;
 }
-
 </script>
