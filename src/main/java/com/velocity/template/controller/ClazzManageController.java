@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -11,6 +12,7 @@ import com.myself.common.exception.ServiceException;
 import com.myself.common.message.JsonMessage;
 import com.velocity.template.data.ClazzAttribute;
 import com.velocity.template.entity.Clazz;
+import com.velocity.template.enums.AttributeTypeEnum;
 import com.velocity.template.param.ClazzQueryParam;
 import com.velocity.template.service.IClazzService;
 
@@ -30,7 +32,9 @@ public class ClazzManageController extends BaseController {
 	}
 	
 	@RequestMapping("/add")
-	public String add() {
+	public String add(Model model) {
+		AttributeTypeEnum[] types = AttributeTypeEnum.values();
+		model.addAttribute("types", types);
 		return "clazz-add";
 	}
 	

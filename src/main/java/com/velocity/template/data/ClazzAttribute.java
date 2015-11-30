@@ -17,7 +17,14 @@ public class ClazzAttribute implements Serializable {
 	private String[] attributeSearch;
 	private String[] attributeColumn;
 	private String[] attributeEdit;
+	private String[] attributeCheck;
 	
+	public String[] getAttributeCheck() {
+		return attributeCheck;
+	}
+	public void setAttributeCheck(String[] attributeCheck) {
+		this.attributeCheck = attributeCheck;
+	}
 	public String[] getAttributeEdit() {
 		return attributeEdit;
 	}

@@ -13,11 +13,18 @@ public class Attribute implements Serializable {
 	private String attributeSearch;
 	private String attributeColumn;
 	private String attributeEdit;
+	private String attributeCheck;
 	private String status;
 	private Date createTime;
 	private Date updateTime;
 	private String remarks;
 	
+	public String getAttributeCheck() {
+		return attributeCheck;
+	}
+	public void setAttributeCheck(String attributeCheck) {
+		this.attributeCheck = attributeCheck;
+	}
 	public String getAttributeEdit() {
 		return attributeEdit;
 	}

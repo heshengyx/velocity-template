@@ -40,9 +40,9 @@
     <td role="gridcell"><input type="text" name="attributeTitle" class="attributeTitle" style="width:80px;" placeholder="属性标题" /></td>
     <td role="gridcell">
     <select name="attributeType" class="attributeType">
-    	<option value="String">String</option>
-    	<option value="Date">Date</option>
-    	<option value="int">int</option>
+    	<c:forEach var="types" items="${types}">
+    	<option value="${types.text}">${types.text}</option>
+    	</c:forEach>
     </select></td>
     <td role="gridcell"><input role="checkbox" name="attributeSearch" class="attributeSearch" type="checkbox" value="1"></td>
     <td role="gridcell"><input role="checkbox" name="attributeEdit" class="attributeEdit" type="checkbox" value="1"></td>
