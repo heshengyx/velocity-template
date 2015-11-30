@@ -6,7 +6,7 @@ public enum AttributeTypeEnum {
 	DATE("Date", "TIMESTAMP");
 	
 	private String text;
-	private String jdbcType;
+	private String jdbcType; 
 	
 	private AttributeTypeEnum(String text, String jdbcType) {
 		this.text = text;
