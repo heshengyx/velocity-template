@@ -20,6 +20,7 @@ import org.apache.velocity.app.VelocityEngine;
 import com.myself.common.exception.ServiceException;
 import com.myself.common.utils.StringUtil;
 import com.velocity.template.data.ClazzAttribute;
+import com.velocity.template.enums.AttributeTypeEnum;
 
 public class VelocityTemplate {
 
@@ -389,19 +390,27 @@ public class VelocityTemplate {
 			}
 			results.append("<result column=\"").append(attributeColumns[i])
 					.append("\" property=\"").append(attributeNames[i])
-					.append("\" jdbcType=\"VARCHAR\" />\n");
-			
+					.append("\" jdbcType=\"")
+					.append(AttributeTypeEnum.getJdbcType(attributeTypes[i]))
+					.append("\" />\n");
+
 			columns.append(attributeColumns[i]);
 			values.append("#{param.").append(attributeNames[i])
-					.append(", jdbcType=VARCHAR}");
+					.append(", jdbcType=")
+					.append(AttributeTypeEnum.getJdbcType(attributeTypes[i]))
+					.append("}");
 			if (i != attributeNames.length) {
 				columns.append(", ");
 				values.append(",\n");
 			}
-			
+
 			if ("1".equals(attributeEdits[i])) {
-				sets.append(attributeColumns[i]).append(" = #{param.")
-						.append(attributeNames[i]).append(", jdbcType=VARCHAR},\n");
+				sets.append(attributeColumns[i])
+						.append(" = #{param.")
+						.append(attributeNames[i])
+						.append(", jdbcType=")
+						.append(AttributeTypeEnum
+								.getJdbcType(attributeTypes[i])).append("},\n");
 			}
 		}
 		

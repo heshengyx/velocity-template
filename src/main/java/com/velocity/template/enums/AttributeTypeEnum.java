@@ -32,7 +32,7 @@ public enum AttributeTypeEnum {
 		}
 	}
 
-	public String getJdbcType(String text) {
+	public static String getJdbcType(String text) {
 		return types.get(text);
 	}
 }
