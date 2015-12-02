@@ -5,6 +5,13 @@
 	<head>
 		<title>类文件管理</title>
 		<link rel="stylesheet" href="${ctx}/css/ui-dialog.css" />
+		<link rel="stylesheet" href="${ctx}/css/daterangepicker/daterangepicker.css" />
+		<style type="text/css">
+	      .date-calendar { position: relative; }
+	      .date-calendar i {
+	        position: absolute; bottom: 10px; right: 24px; top: auto; cursor: pointer;
+	      }
+	    </style>
 	</head>
 
 	<body>
@@ -22,18 +29,24 @@
 					<li class="active">类文件管理</li>
 				</ul>
 			</div>
-
+			
 			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
 						<form class="form-horizontal" role="form">
 							<div class="form-group">
-								<label class="col-sm-1 control-label no-padding-right" for="buildingNameQuery">名称</label>
-								<div class="col-sm-11">
-									<input type="text" id="buildingNameQuery" placeholder="名称" class="col-xs-10 col-sm-5" />
+								<label class="col-sm-1 control-label no-padding-right" for="clazzNameQuery">类名名称</label>
+								<div class="col-sm-3">
+									<input type="text" id="clazzNameQuery" placeholder="类名名称" class="form-control" />
 								</div>
 							</div>
-							
+							<div class="form-group">
+								<label class="col-sm-1 control-label no-padding-right" for="createDateQuery">创建日期</label>
+								<div class="col-sm-3 date-calendar">
+									<input type="text" id="createDateQuery" placeholder="创建日期" class="form-control">
+									<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+								</div>
+							</div>
 							
 							<div class="form-group">
 								<div class="col-md-offset-1 col-md-11">
@@ -55,13 +68,14 @@
 			</div><!-- /.page-content -->
 		</div><!-- /.main-content -->
 		<jscript>
-		<script src="${ctx}/js/date-time/bootstrap-datepicker.min.js"></script>
 		<script src="${ctx}/js/jqGrid/jquery.jqGrid.min.js"></script>
 		<script src="${ctx}/js/jqGrid/i18n/grid.locale-cn.js"></script>
 		<script src="${ctx}/js/format-util.js"></script>
 		<script src="${ctx}/js/dialog-min.js"></script>
 		<script src="${ctx}/js/dialog-util.js"></script>
 		<script src="${ctx}/js/jquery.validate.min.js"></script>
+		<script src="${ctx}/js/daterangepicker/moment.min.js"></script>
+		<script src="${ctx}/js/daterangepicker/daterangepicker.js"></script>
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({
@@ -123,6 +137,16 @@
 				};
 				showDialog(url, options);
 			});
+			
+			$('#createDateQuery').daterangepicker({
+				
+			});
+/* 			$('#createDateQuery').daterangepicker().prev().on(ace.click_event, function(){
+				$(this).next().focus();
+			}); */
+			$('.date-calendar i').click(function() {
+	          	$(this).parent().find('input').click();
+	        });
 		});
 		function styleCheckbox(table) {
 		/**

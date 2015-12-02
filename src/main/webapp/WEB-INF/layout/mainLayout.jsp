@@ -17,8 +17,8 @@
 	<sitemesh:write property="head" />
 	<!-- ace styles -->
 	<link rel="stylesheet" href="${ctx}/css/ace.min.css" />
-	<link rel="stylesheet" href="${ctx}/css/ace-rtl.min.css" />
-	<link rel="stylesheet" href="${ctx}/css/ace-skins.min.css" />
+	<%-- <link rel="stylesheet" href="${ctx}/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="${ctx}/css/ace-skins.min.css" /> --%>
 
 	<!--[if lte IE 8]>
 	  <link rel="stylesheet" href="${ctx}/css/ace-ie.min.css" />
