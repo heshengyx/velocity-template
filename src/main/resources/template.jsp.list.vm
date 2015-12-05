@@ -5,6 +5,13 @@
 	<head>
 		<title>${title}管理</title>
 		<link rel="stylesheet" href="${ctx}/css/ui-dialog.css" />
+		<link rel="stylesheet" href="${ctx}/css/daterangepicker/daterangepicker.css" />
+		<style type="text/css">
+	      .date-calendar { position: relative; }
+	      .date-calendar i {
+	        position: absolute; bottom: 10px; right: 24px; top: auto; cursor: pointer;
+	      }
+	    </style>
 	</head>
 
 	<body>
@@ -29,6 +36,13 @@
 						<form class="form-horizontal" role="form">
 							<!-- querys -->
 							${querys}
+							<div class="form-group">
+								<label class="col-sm-1 control-label no-padding-right" for="createDateQuery">创建日期</label>
+								<div class="col-sm-3 date-calendar">
+									<input type="text" id="createDateQuery" placeholder="创建日期" class="form-control">
+									<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+								</div>
+							</div>
 							<!-- querys -->
 							
 							<div class="form-group">
@@ -51,13 +65,14 @@
 			</div><!-- /.page-content -->
 		</div><!-- /.main-content -->
 		<jscript>
-		<script src="${ctx}/js/date-time/bootstrap-datepicker.min.js"></script>
 		<script src="${ctx}/js/jqGrid/jquery.jqGrid.min.js"></script>
 		<script src="${ctx}/js/jqGrid/i18n/grid.locale-cn.js"></script>
 		<script src="${ctx}/js/format-util.js"></script>
 		<script src="${ctx}/js/dialog-min.js"></script>
 		<script src="${ctx}/js/dialog-util.js"></script>
 		<script src="${ctx}/js/jquery.validate.min.js"></script>
+		<script src="${ctx}/js/daterangepicker/moment.min.js"></script>
+		<script src="${ctx}/js/daterangepicker/daterangepicker.js"></script>
 		<script type="text/javascript">	
 		$(document).ready(function() {
 			$("#dataGridTable").jqGrid({
@@ -82,10 +97,11 @@
 			   	rownumbers: true,
 			   	pager: "#dataGridPager",
 			   	jsonReader : {
-					root : 'data',
-					page : 'index',
-					total : 'total',
-					records : 'totalRecord',
+					root : 'data.datas',
+					page : 'data.index',
+					total : 'data.total',
+					records : 'data.totalRecord',
+					userdata: 'code',
 					repeatitems : false
 				},
 			   	viewrecords: true,
@@ -116,6 +132,17 @@
 				};
 				showDialog(url, options);
 			});
+			
+			$('#createDateQuery').daterangepicker({
+				"locale": {
+					"format": "YYYY-MM-DD",
+					"applyLabel": "确定",
+					"cancelLabel": "取消"
+				}
+			});
+			$('.date-calendar i').click(function() {
+	          	$(this).parent().find('input').click();
+	        });
 		});
 		function styleCheckbox(table) {
 		/**
@@ -165,16 +192,40 @@
 			$(table).find('.ui-pg-div').tooltip({container:'body'});
 		}
 		function doSearch() {
+			var createDate = $("#createDateQuery").val();
+			var startDate = createDate.split(" - ")[0];
+			var endDate = createDate.split(" - ")[1];
 			var page = $("#dataGridTable").jqGrid("getGridParam", "page");
 			$("#dataGridTable").clearGridData();
 			$("#dataGridTable").jqGrid("setGridParam", {
 				url : "${ctx}/manage/${entity}/query?random="+ Math.random(),
+				datatype: "json",
 				page : page,
 				postData : {
 					${querysParam}
-					random: Math.random()
+					startDate : startDate,
+					endDate : endDate
 				},
-				datatype: "json"
+				loadComplete: function() {
+					var userData = $("#dataGridTable").jqGrid('getGridParam', 'userData');
+					if ('500' == userData) {
+						dialog({
+							title : '消息',
+							width : 200,
+							content: '网络异常，请稍后再试',
+							okValue: '确定',
+							ok: true
+						}).showModal();
+					}
+				},
+				loadError: function(xhr, status, error) {
+					dialog({
+						title : '消息',
+						width : 250,
+						content: '加载数据异常，请重新刷新页面',
+						ok: true
+					}).showModal();
+				}
 			}).trigger("reloadGrid");
 		}
 		function doModify(id) {

@@ -13,6 +13,12 @@
 	<sql id="sqlQuery">
 		FROM ${table} a where 1=1
 		${conditions}
+		<if test="param.startDate != null and param.startDate != ''">
+			<![CDATA[ AND TO_CHAR(a.CREATE_TIME, 'YYYY-MM-DD') >= #{param.startDate} ]]>
+		</if>
+		<if test="param.endDate != null and param.endDate != ''">
+			<![CDATA[ AND TO_CHAR(a.CREATE_TIME, 'YYYY-MM-DD') <= #{param.endDate} ]]>
+		</if>
 	</sql>
 	
 	<select id="getDataById" resultMap="${entity}Result">

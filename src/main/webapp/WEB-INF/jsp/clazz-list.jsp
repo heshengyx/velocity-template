@@ -217,7 +217,6 @@
 				},
 				loadComplete: function() {
 					var userData = $("#dataGridTable").jqGrid('getGridParam', 'userData');
-					alert(userData);
 					if ('500' == userData) {
 						dialog({
 							title : '消息',
@@ -225,7 +224,7 @@
 							content: '网络异常，请稍后再试',
 							okValue: '确定',
 							ok: true
-						});
+						}).showModal();
 					}
 				},
 				loadError: function(xhr, status, error) {
@@ -234,7 +233,7 @@
 						width : 250,
 						content: '加载数据异常，请重新刷新页面',
 						ok: true
-					});
+					}).showModal();
 				}
 			}).trigger("reloadGrid");
 		}
