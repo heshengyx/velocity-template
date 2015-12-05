@@ -8,4 +8,5 @@ public interface IPage<T> extends java.io.Serializable {
 	int getIndex();
 	int getTotalRecord();
 	Collection<T> getDatas();
+	
 }

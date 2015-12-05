@@ -26,5 +26,4 @@ public class ClazzQueryParam implements Serializable {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	
 }

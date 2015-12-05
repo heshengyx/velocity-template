@@ -65,6 +65,7 @@ public class ClazzManageController extends BaseController {
 		return jMessage;
 	}
 	
+	
 	@RequestMapping("/getData")
 	@ResponseBody
 	public Object getData(String id) {
