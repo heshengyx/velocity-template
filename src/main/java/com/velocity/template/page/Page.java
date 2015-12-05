@@ -33,13 +33,13 @@ public class Page<T> implements IPage<T> {
 
 	private int totalRecord;
 
-	private Collection<T> data;
+	private Collection<T> datas;
 
 	public Page() {
 	}
 
-	public Page(Collection<T> data, int totalRecord, int index, int size) {
-		this.data = (data == null ? new ArrayList<T>(0) : data);
+	public Page(Collection<T> datas, int totalRecord, int index, int size) {
+		this.datas = (datas == null ? new ArrayList<T>(0) : datas);
 		this.totalRecord = totalRecord;
 		this.size = size;
 		this.index = index;
@@ -70,8 +70,8 @@ public class Page<T> implements IPage<T> {
 		return index;
 	}
 
-	public Collection<T> getData() {
-		return data;
+	public Collection<T> getDatas() {
+		return datas;
 	}
 
 }

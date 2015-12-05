@@ -102,10 +102,11 @@
 			   	rownumbers: true,
 			   	pager: "#dataGridPager",
 			   	jsonReader : {
-					root : 'data',
-					page : 'index',
-					total : 'total',
-					records : 'totalRecord',
+					root : 'data.datas',
+					page : 'data.index',
+					total : 'data.total',
+					records : 'data.totalRecord',
+					userdata: 'code',
 					repeatitems : false
 				},
 			   	viewrecords: true,
@@ -139,9 +140,13 @@
 			});
 			
 			$('#createDateQuery').daterangepicker({
-				
+				"locale": {
+					"format": "YYYY-MM-DD",
+					"applyLabel": "确定",
+					"cancelLabel": "取消"
+				}
 			});
-/* 			$('#createDateQuery').daterangepicker().prev().on(ace.click_event, function(){
+			/* $('#createDateQuery').daterangepicker().prev().on(ace.click_event, function(){
 				$(this).next().focus();
 			}); */
 			$('.date-calendar i').click(function() {
@@ -196,15 +201,41 @@
 			$(table).find('.ui-pg-div').tooltip({container:'body'});
 		}
 		function doSearch() {
+			var createDate = $("#createDateQuery").val();
+			var startDate = createDate.split(" - ")[0];
+			var endDate = createDate.split(" - ")[1];
 			var page = $("#dataGridTable").jqGrid("getGridParam", "page");
 			$("#dataGridTable").clearGridData();
 			$("#dataGridTable").jqGrid("setGridParam", {
 				url : "${ctx}/manage/clazz/query?random="+ Math.random(),
+				datatype: "json",
 				page : page,
 				postData : {
-					//buildingName : $.trim($("#buildingName").val())
+					clazzName : $.trim($("#clazzNameQuery").val()),
+					startDate : startDate,
+					endDate : endDate
 				},
-				datatype: "json"
+				loadComplete: function() {
+					var userData = $("#dataGridTable").jqGrid('getGridParam', 'userData');
+					alert(userData);
+					if ('500' == userData) {
+						dialog({
+							title : '消息',
+							width : 200,
+							content: '网络异常，请稍后再试',
+							okValue: '确定',
+							ok: true
+						});
+					}
+				},
+				loadError: function(xhr, status, error) {
+					dialog({
+						title : '消息',
+						width : 250,
+						content: '加载数据异常，请重新刷新页面',
+						ok: true
+					});
+				}
 			}).trigger("reloadGrid");
 		}
 		function doModify(id) {

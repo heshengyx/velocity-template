@@ -13,6 +13,7 @@ import com.myself.common.message.JsonMessage;
 import com.velocity.template.data.ClazzAttribute;
 import com.velocity.template.entity.Clazz;
 import com.velocity.template.enums.AttributeTypeEnum;
+import com.velocity.template.page.IPage;
 import com.velocity.template.param.ClazzQueryParam;
 import com.velocity.template.service.IClazzService;
 
@@ -46,7 +47,23 @@ public class ClazzManageController extends BaseController {
 	@RequestMapping("/query")
 	@ResponseBody
 	public Object query(ClazzQueryParam param, int page, int rows) {
-		return clazzService.query(param, page, rows);
+		JsonMessage jMessage = new JsonMessage();
+		try {
+			int i = 1 / 0;
+			IPage<Clazz> datas = clazzService.query(param, page, rows);
+			jMessage.setCode(JsonMessage.SUCCESS_CODE);
+			jMessage.setData(datas);
+		} catch (Exception e) {
+			jMessage.setCode(JsonMessage.ERROR_CODE);
+			if (e instanceof ServiceException) {
+				jMessage.setMessage(e.getMessage());
+			} else {
+				jMessage.setMessage("系统异常");
+			}
+			logger.error(jMessage.getMessage(), e);
+		}
+		
+		return jMessage;
 	}
 	
 	@RequestMapping("/getData")
