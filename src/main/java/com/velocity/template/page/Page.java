@@ -73,5 +73,4 @@ public class Page<T> implements IPage<T> {
 	public Collection<T> getDatas() {
 		return datas;
 	}
-
 }

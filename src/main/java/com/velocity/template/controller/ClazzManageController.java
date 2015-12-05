@@ -62,7 +62,6 @@ public class ClazzManageController extends BaseController {
 			}
 			logger.error(jMessage.getMessage(), e);
 		}
-		
 		return jMessage;
 	}
 	

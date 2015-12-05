@@ -56,4 +56,5 @@ UPDATE_TIME = #{param.updateTime, jdbcType=TIMESTAMP},
 	<delete id="deleteById">
 		delete from CLAZZ a where a.ID = #{id, jdbcType=VARCHAR}
 	</delete>
+	
 </mapper>

@@ -238,6 +238,7 @@
 				}
 			}).trigger("reloadGrid");
 		}
+		
 		function doModify(id) {
 			var url = "${ctx}/manage/clazz/edit?id=" + id + "&random=" + Math.random();
 			var options = {
