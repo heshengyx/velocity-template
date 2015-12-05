@@ -49,7 +49,6 @@ public class ClazzManageController extends BaseController {
 	public Object query(ClazzQueryParam param, int page, int rows) {
 		JsonMessage jMessage = new JsonMessage();
 		try {
-			//int i = 1 / 0;
 			IPage<Clazz> datas = clazzService.query(param, page, rows);
 			jMessage.setCode(JsonMessage.SUCCESS_CODE);
 			jMessage.setData(datas);

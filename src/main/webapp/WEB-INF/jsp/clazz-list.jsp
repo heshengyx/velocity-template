@@ -138,7 +138,6 @@
 				};
 				showDialog(url, options);
 			});
-			
 			$('#createDateQuery').daterangepicker({
 				"locale": {
 					"format": "YYYY-MM-DD",

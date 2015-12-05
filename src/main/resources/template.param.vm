@@ -21,4 +21,5 @@ public class ${Entity}QueryParam implements Serializable {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+	
 }
